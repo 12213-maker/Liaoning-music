@@ -1,0 +1,102 @@
+{
+  "name": "srd-bd2-boot",
+  "version": "2.0.0",
+  "description": "SRD-BD 基础开发平台",
+  "author": "srd-bd team",
+  "license": "MIT",
+  "scripts": {
+    "pre": "npm install",
+    "dev": "vue-cli-service serve",
+    "build:prod": "vue-cli-service build",
+    "build:stage": "vue-cli-service build --mode staging",
+    "build:ln": "vue-cli-service build --mode ln",
+    "build:local": "vue-cli-service build --mode local",
+    "preview": "node build/index.js --preview",
+    "lint": "eslint --ext .js,.vue src"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,vue}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "keywords": [
+    "vue",
+    "admin",
+    "dashboard",
+    "element-ui",
+    "boilerplate",
+    "admin-template",
+    "management-system"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://10.1.235.70:8889/appproject/base/ai-srd-bd-boot.git"
+  },
+  "dependencies": {
+    "@riophae/vue-treeselect": "0.4.0",
+    "@vuikit/icons": "^0.8.1",
+    "@vuikit/theme": "^0.8.1",
+    "axios": "0.21.0",
+    "clipboard": "2.0.6",
+    "core-js": "^3.8.1",
+    "echarts": "4.9.0",
+    "element-ui": "2.14.1",
+    "file-saver": "2.0.4",
+    "fuse.js": "6.4.3",
+    "highlight.js": "10.4.1",
+    "js-beautify": "1.13.0",
+    "js-cookie": "2.2.1",
+    "jsencrypt": "3.0.0-rc.1",
+    "nprogress": "0.2.0",
+    "path-to-regexp": "6.2.0",
+    "quill": "1.3.7",
+    "screenfull": "5.0.2",
+    "sortablejs": "^1.15.0",
+    "vue": "2.6.12",
+    "vue-count-to": "1.0.13",
+    "vue-cropper": "0.5.5",
+    "vue-json-editor": "^1.4.3",
+    "vue-json-viewer": "^2.2.18",
+    "vue-router": "3.4.9",
+    "vuedraggable": "2.24.3",
+    "vuex": "3.6.0",
+    "vue-awesome-swiper": "^2.6.7",
+    "qs": "^6.10.3"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "4.4.6",
+    "@vue/cli-plugin-eslint": "4.4.6",
+    "@vue/cli-service": "4.4.6",
+    "babel-eslint": "10.1.0",
+    "chalk": "4.1.0",
+    "connect": "3.6.6",
+    "eslint": "7.15.0",
+    "eslint-plugin-vue": "7.2.0",
+    "jplayer": "^2.9.2",
+    "jquery": "^3.5.1",
+    "lint-staged": "10.5.3",
+    "runjs": "4.4.2",
+    "sass": "1.30.0",
+    "sass-loader": "10.1.0",
+    "script-ext-html-webpack-plugin": "2.1.5",
+    "svg-sprite-loader": "5.1.1",
+    "vue-template-compiler": "2.6.12",
+    "vue2-ace-editor": "0.0.15",
+    "swiper": "^4.5.1",
+    "compression-webpack-plugin": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=8.9",
+    "npm": ">= 3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
+}

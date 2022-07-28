@@ -1,0 +1,219 @@
+// cover some element-ui styles
+
+@import './variables.scss';
+
+.el-breadcrumb__inner,
+.el-breadcrumb__inner a {
+  font-weight: 400 !important;
+}
+
+.el-upload {
+  input[type="file"] {
+    display: none !important;
+  }
+}
+
+.el-upload__input {
+  display: none;
+}
+
+.cell {
+  .el-tag {
+    margin-right: 0px;
+  }
+}
+
+.small-padding {
+  .cell {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+.fixed-width {
+  .el-button--mini {
+    -padding: 7px 10px;
+    width: 60px;
+    border:0px;
+    background:none;
+  }
+}
+
+.status-col {
+  .cell {
+    padding: 0 10px;
+    text-align: center;
+
+    .el-tag {
+      margin-right: 0px;
+    }
+  }
+}
+
+// to fixed https://github.com/ElemeFE/element/issues/2461
+.el-dialog {
+  transform: none;
+  left: 0;
+  position: relative;
+  margin: 0 auto;
+}
+
+// refine element ui upload
+.upload-container {
+  .el-upload {
+    width: 100%;
+
+    .el-upload-dragger {
+      width: 100%;
+      height: 200px;
+    }
+  }
+}
+
+// dropdown
+.el-dropdown-menu {
+  a {
+    display: block
+  }
+}
+
+// fix date-picker ui bug in filter-item
+.el-range-editor.el-input__inner {
+  display: inline-flex !important;
+}
+
+// to fix el-date-picker css style
+.el-range-separator {
+  box-sizing: content-box;
+}
+
+
+// 按钮样式
+.el-button {
+    height: 32px;
+    line-height: 1;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 0 16px;
+    border-color: #D9D9D9;
+    background-color: $whiteColor;
+    color: $firstColor;
+    font-family: 'syht';
+
+    &:hover,
+    &:focus {
+        color: $themeColor;
+        background-color: $whiteColor;
+        border-color: $themeColor;
+
+    }
+
+    &.el-button--primary {
+        background-color: $themeColor;
+        border: none;
+
+        &:hover,
+        &:focus {
+            color: $firstColor;
+            background-color: $themeColorHover;
+
+        }
+    }
+
+    &.el-button--primary.is-plain {
+      background-color: rgba(0,0,0,0);
+      border: 1px solid $themeColor;
+    }
+
+    &.el-button--primary.is-plain:hover {
+      color: $themeColor;
+    }
+}
+
+
+.el-date-editor .el-input__inner {
+  padding-left:12px;
+}
+
+.el-date-editor .el-input__prefix {
+  display:none
+}
+
+
+.el-tabs__item.is-active {
+  color:#262626;
+}
+
+
+.el-popup-parent--hidden .v-modal {
+  top: 61px;
+}
+
+.el-button--text {
+  border:0px;
+  background-color: rgba(0,0,0,0);
+  color: rgba(255,153,0,0.9);
+}
+
+.el-button--text:hover, .el-button--text:focus {
+  background-color: rgba(0,0,0,0);
+}
+
+.el-table td.is-center {
+  padding:0px;
+  height:40px;
+}
+
+.el-table td.is-center {
+  padding:0px;
+  height:40px;
+}
+
+.no-line-tab {
+  .el-tabs__nav-wrap::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 0px;
+    background-color: #dfe4ed;
+    z-index: 1;
+  }
+
+  .el-tabs__item {
+    font-size: 20px;
+    font-family: syht;
+    color: #595959;
+    line-height: 28px;
+    height:36px;
+  }
+
+  .el-tabs__item.is-active {
+    font-family: syhtMedium;
+    color: #262626;
+  }
+
+  .el-tabs__active-bar {
+    height:3px;
+  }
+
+
+} 
+
+
+.el-pagination.is-background .btn-prev, .el-pagination.is-background .btn-next, .el-pagination.is-background .el-pager li {
+  background-color: rgba(0,0,0,0) !important;
+  border: 1px solid #e1e1e1;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  color: #ff9900 !important;
+  font-weight:500 !important;
+}
+
+
+
+.el-pagination.is-background .el-pager li.active {
+  color: #ff9900;
+}

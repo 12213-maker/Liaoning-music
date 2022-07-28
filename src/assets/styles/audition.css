@@ -1,0 +1,667 @@
+.audition-wrap {
+  background: #f2f3f7;
+}
+.audition-container {
+  background: #fff;
+  margin: 35px 35px 0px;
+  padding: 15px 20px;
+  min-height: 500px;
+}
+
+/* 查询条件 */
+.form-list {
+  overflow: hidden;
+}
+.form-list li {
+  display: inline-block;
+  float: left;
+  height: 42px;
+  margin-right: 30px;
+  margin-bottom: 8px;
+}
+.el-form-item--medium .el-form-item__label {
+  font-size: 18px;
+  color: #404040;
+  padding: 0 5px 0px 0px;
+  font-weight: normal;
+}
+
+/* 查询列表 */
+.audition-query-list-box {
+}
+
+.audition-query-item {
+  position: relative;
+  padding: 25px 0px 0px;
+}
+
+.audition-query-item .audition-title {
+  font-size: 24px;
+  line-height: 24px;
+  color: #404040;
+  font-family: 'SimHei';
+  margin-bottom: 20px;
+}
+
+.bi-content {
+  overflow: hidden;
+  cursor: pointer;
+}
+.bi-content .title {
+  float: left;
+  width: 150px;
+}
+.bi-content .title div {
+  width: 116px;
+  height: 32px;
+  font-size: 18px;
+  color: #404040;
+  text-align: center;
+  border: 2px solid #a0d0ff;
+  background: #cbe5fe;
+  border-radius: 5px;
+  font-weight: normal;
+}
+.bi-content .detail {
+  color: #404040;
+  font-size: 18px;
+  line-height: 34px;
+}
+
+.audition-field {
+  overflow: hidden;
+  padding: 35px 0px 35px;
+}
+
+.audition-field li {
+  display: inline-block;
+  float: left;
+  height: 20px;
+  line-height: 20px;
+  margin-right: 45px;
+  font-size: 18px;
+  color: #737373;
+}
+
+.audition-field li label {
+  padding-right: 10px;
+  font-weight: normal;
+}
+.query-item-play {
+  position: absolute;
+  right: 0px;
+  bottom: 30px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  color: #333;
+  z-index: 10;
+  background: #fff;
+}
+.query-item-play .icon-play {
+    float: left;
+    display: inline-block;
+    margin-right: 0px;
+    width: 30px;
+    height: 30px;
+    background: transparent url(../audition_images/icon_play_blue.png) no-repeat left center;
+}
+
+.split-lines {
+  padding-top: 10px;
+  border-bottom: 2px solid #e6e6e6;
+}
+
+.is-listen {
+  font-size: 18px;
+  color: #fe9900;
+  text-align: right;
+}
+
+.audition-detail-item {
+}
+
+.audition-detail-item .title {
+  font-size: 22px;
+  line-height: 22px;
+  color: #404040;
+  font-family: 'SimHei';
+  margin-bottom: 15px;
+  padding-left: 15px;
+  text-align: left;
+}
+.audition-detail-item .title .el-icon-reading {
+  color: #fe9900;
+}
+.audition-detail-item .audition-field {
+  padding: 0px 0px 20px 35px;
+}
+.audition-detail-item .audition-field li {
+  margin-right: 20px;
+}
+.audition-detail-content {
+  margin-bottom: 15px;
+}
+
+.record-title,
+.accept-title {
+  font-size: 22px;
+  color: #404040;
+  line-height: 22px;
+  font-family: 'SimHei';
+  padding-bottom: 15px;
+  margin-bottom: 10px;
+}
+
+.audition-detail-content .accept-title {
+  border-bottom: 2px #e6e6e6 solid;
+}
+
+/* 录音文本*/
+.record-info-box,
+.accept-info-box {
+  height: 330px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.bs-callout {
+  margin: 0px 0 15px;
+  height: 34px;
+  overflow: hidden;
+  font-size: 18px;
+  color: #404040;
+  border: 1px solid #eee;
+  border-left-width: 4px;
+  border-radius: 3px;
+}
+
+.bs-callout dt {
+  float: left;
+  width: 75px;
+  line-height: 34px;
+  text-align: center;
+}
+
+.bs-callout dd {
+  margin-left: 75px;
+  line-height: 34px;
+  padding-left: 10px;
+  overflow: hidden;
+}
+
+.bs-callout.bs-callout-warning {
+  border-color: #ffedd5;
+  border-left-color: #fe9900;
+  box-shadow: 1px 0px 1px 0px #fe9900;
+}
+
+.bs-callout.bs-callout-warning dt {
+  background: #fff9f1;
+}
+
+.bs-callout.bs-callout-success {
+  border-color: #ddeedc;
+  border-left-color: #339933;
+  box-shadow: 1px 0px 1px 0px #339933;
+}
+
+.bs-callout.bs-callout-success dt {
+  background: #f4f9f3;
+}
+
+/* 受理情况 */
+.accept-info-box {
+  font-size: 16px;
+  color: #515a6e;
+}
+
+.accept-info-box table caption {
+  font-size: 22px;
+  line-height: 22px;
+  font-family: 'SimHei';
+  color: #404040;
+}
+
+.accept-info-box table th {
+  text-align: right;
+  padding-right: 10px;
+  height: 36px;
+  line-height: 36px;
+}
+
+.accept-info-box .attribution-tags {
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #339933;
+  color: #339933;
+  border-radius: 3px;
+  padding: 0px 10px;
+}
+
+.open-play-list {
+  cursor: pointer;
+  width: 38px;
+  height: 45px;
+}
+.audition-play-box .el-col-12,
+.audition-detail-content .el-col-12 {
+  padding: 0px 15px;
+}
+.play-list-box {
+  height: 84px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 5px;
+}
+
+.play-list-box .list-body {
+}
+.play-list-box .list-body ul {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+.play-list-box .list-body li {
+  height: 28px;
+  line-height: 28px;
+  padding-left: 10px;
+  cursor: pointer;
+  color: #000;
+}
+
+.play-list-box .list-body li:nth-child(even) {
+  background: #f3f3f3;
+}
+
+.play-list-box .list-body li:hover,
+.play-list-box .list-body li.active {
+  background: #14151b;
+  color: #fff;
+}
+.play-list-box .list-body .play-title .el-icon-video-play {
+  color: #ff0000;
+  font-size: 16px;
+}
+
+/* 重复投诉列表 */
+.repeated-title {
+  font-size: 22px;
+  color: #404040;
+  line-height: 22px;
+  font-family: 'SimHei';
+  padding-bottom: 15px;
+}
+
+.repeated-list-box {
+  height: 97px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.comTable {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.comTable thead > tr > th {
+  height: 30px;
+  padding: 5px 0;
+  font-weight: bold;
+  text-align: center;
+  color: #5c5c5c;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  background-color: #deedf9;
+  font-size: 14px;
+}
+
+.comTable tbody > tr > td {
+  height: 42px;
+  overflow: hidden;
+  text-align: center;
+  word-wrap: break-word;
+  word-break: break-all;
+  color: #696969;
+}
+
+.comTable tbody > tr:nth-child(even) > td {
+  background-color: #f3f3f3;
+}
+
+.comTable thead > tr > th:last-child,
+.comTable tbody > tr > td:last-child {
+  border-right: none;
+}
+
+.comTable.table-border tr > td {
+  border: 1px solid #ddd;
+}
+
+.comTable tbody > tr.even td {
+  background: #f3f3f3;
+}
+.comTable tbody > tr.pink td {
+  color: #f0f;
+}
+.comTable tbody > tr.danger td {
+  color: #d9534f;
+}
+
+/* 行获得焦点 */
+.comTable tbody > tr.active td,
+.comTable tbody > tr:hover td {
+  background: #e6effc;
+}
+
+/* 播放控件 */
+.my-playbar {
+  position: relative;
+  background: #2c2d2f;
+}
+
+.my-playbar .jp-audio {
+  width: 100%;
+  padding: 0px 10px 0px;
+  color: #fff;
+  background: #2c2d2f;
+}
+
+.my-playbar .jp-audio .jp-interface {
+  background: none;
+  height: auto;
+}
+
+/* 播放按钮 */
+.my-playbar .jp-audio .jp-controls {
+  padding: 5px 0px;
+  width: 100%;
+}
+
+.my-playbar .jp-audio .jp-play {
+  width: 40px;
+  height: 40px;
+  background-image: url(../audition_images/playbar.png);
+  background-position: -40px -202px;
+  background-repeat: no-repeat;
+}
+
+.my-playbar .jp-audio.jp-state-playing .jp-play {
+  background-image: url(../audition_images/playbar.png);
+  background-position: -40px -163px;
+  background-repeat: no-repeat;
+}
+
+.my-playbar .jp-audio .jp-type-single .jp-progress {
+  left: 45px;
+  top: 12px;
+  width: 275px;
+  height: 24px;
+}
+
+.my-playbar .jp-audio .jp-seek-bar {
+  background: #999;
+}
+
+.my-playbar .jp-audio .jp-seek-bar .jp-play-bar {
+  background-image: url(../audition_images/jplayer.blue.monday.seeking.gif);
+  background-position: left center;
+  background-repeat: repeat-x;
+}
+
+.my-playbar .jp-seek-bar.jp-seeking-bg {
+  background-image: url(../audition_images/jplayer.blue.monday.seeking.gif);
+  background-position: left center;
+  background-repeat: repeat-x;
+}
+/* 播放音量控制 */
+.my-playbar .jp-volume-controls {
+  position: absolute;
+  top: 12px;
+  left: 450px;
+  width: 100px;
+  height: 24px;
+}
+
+.my-playbar .jp-volume-controls .jp-mute {
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  background: transparent url(../audition_images/playbar.png) no-repeat -32px -250px;
+}
+
+.my-playbar .jp-state-muted .jp-mute:focus {
+  background: transparent url(../audition_images/playbar.png) no-repeat -3px -250px;
+}
+
+.my-playbar .jp-volume-bar {
+  top: 7px;
+  left: 28px;
+  width: 70px;
+  height: 10px;
+  background: #a9a9a9;
+}
+
+.my-playbar .jp-volume-controls .jp-volume-bar-value {
+  height: 10px;
+  background: #d8d8d8;
+}
+
+/* 播放时间 */
+.my-playbar .jp-audio .jp-type-single .jp-time-holder {
+  top: 12px;
+  left: 320px;
+  width: 130px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.my-playbar .jp-audio .jp-type-single .jp-time-holder strong {
+  float: left;
+  padding: 0px 0px 0px 3px;
+}
+
+.my-playbar .jp-current-time,
+.my-playbar .jp-duration {
+  width: 55px;
+}
+
+.my-playbar .jp-current-time {
+  text-align: right;
+}
+
+.my-playbar .jp-duration {
+  text-align: left;
+  float: left;
+}
+
+/* 站店听音-我的*/
+
+
+
+/* 站店听音-精准推荐 */
+.audition-precise {
+}
+
+.precise-title {
+  overflow: hidden;
+  padding-bottom: 15px;
+}
+
+.precise-title h4 {
+  float: left;
+  height: 44px;
+  font-size: 26px;
+  line-height: 44px;
+  margin: 0;
+}
+
+.precise-title .query-btn {
+  float: right;
+  min-width: 155px;
+  height: 44px;
+  line-height: 34px;
+  font-size: 18px;
+  color: #737373;
+  background-color: #fe9900;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.segline {
+  width: 1px;
+  background: #ff0000;
+  min-height: 400px;
+}
+
+.echart-item {
+  width: 100%;
+  height: 700px;
+}
+
+.audition-precise .tab-pane {
+  position: relative;
+}
+
+.precise-situation {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 100;
+}
+
+.precise-situation {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  z-index: 100;
+}
+
+.precise-situation dt {
+  font-size: 18px;
+  height: 18px;
+  line-height: 18px;
+  font-weight: normal;
+  margin-bottom: 20px;
+}
+
+.precise-situation dd {
+  font-size: 40px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.precise-situation dd small {
+  font-size: 20px;
+  padding: 0px 10px;
+}
+
+.precise-table {
+  position: absolute;
+  left: 45%;
+  bottom: 20px;
+  z-index: 100;
+  width: 50%;
+  color: #535353;
+}
+.precise-table table {
+  width: 100%;
+}
+.precise-table table thead th {
+  font-size: 20px;
+  text-align: right;
+}
+
+.precise-table table tbody {
+  text-align: right;
+}
+
+.precise-table table tbody td {
+  /* height: 28px; */
+}
+
+.precise-table table tbody td.first_row {
+  text-align: left;
+  padding-left: 15px;
+}
+
+.seg-line {
+  margin: 40px auto 0;
+  width: 1px;
+  height: 700px;
+  background: #ddd;
+}
+
+/* 右侧列表 */
+.precise-list-box {
+  height: 700px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+}
+
+.precise-item {
+}
+
+.precise-item .type-title {
+  font-size: 20px;
+  line-height: 20px;
+  height: 20px;
+}
+.precise-item .type-title .el-icon-reading {
+    color: #fe9900;
+    margin-right:10px;
+}
+
+.precise-ticket {
+  padding: 20px 10px 0px;
+  overflow: hidden;
+}
+
+.precise-ticket dl {
+  float: left;
+  width: 30%;
+  margin-right: 3%;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.precise-ticket dl dt {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+
+.precise-ticket dl dd {
+  height: 24px;
+  line-height: 24px;
+  padding-left: 30px;
+  background: transparent url(../audition_images/icon_play_blue.png) no-repeat left center;
+  cursor: pointer;
+  margin:0;
+}
+
+/*无权限*/
+.not-rbac-box {
+    width: 850px;
+    min-height: 400px;
+    margin: 100px auto 0;
+    padding: 250px 0px 0px 0px;
+    background: transparent url(../audition_images/icon-lock.png) no-repeat center top;
+}
+
+.not-rbac-box p {
+    font-size: 30px;
+    color: #404040;
+    font-family: 'SimHei';
+    text-align: center;
+}
