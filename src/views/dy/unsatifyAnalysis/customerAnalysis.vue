@@ -15,7 +15,7 @@
             <el-tab-pane name="1">
               <span slot="label" style="padding:0 24px;"> 客群分析</span>
               <div class="tag-content">
-                <div style="width:100%; display:flex; justify-content: flex-end; align-items:center; margin-bottom:20px;">
+                <div style=" width:100%; display:flex; justify-content: flex-end; align-items:center; margin-bottom:20px;">
                   <span class="label">选择时间：</span>
                   <div style="position:relative; width:298px;">
                     <el-date-picker
