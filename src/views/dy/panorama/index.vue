@@ -59,6 +59,7 @@ import ServicePart02 from './components/ServicePart02';
 import { getUserInfo } from '@/api/stationstore/api'
 
 import {getLatestDate,getWeekList} from '@/api/dy/panorama.js'
+import {parseTime} from '@/utils/tools.js'
 
 
 export default {
@@ -155,13 +156,10 @@ export default {
       getLatestDate({
         "statType": '1',
         "cityId": this.currentAreaId
-      }).then(res=>{
+      }).then(res => {
         if(res.curDate=='') {
-          let arr = new Date().toLocaleDateString().split('/');
-          arr[1] = Number(arr[1]) < 10 ? '0'+arr[1] : arr[1]; 
-          arr[2] = Number(arr[2]) < 10 ? '0'+arr[2] : arr[2]; 
-          this.latestDate = `${arr[0]}${arr[1]}${arr[2]}`;
-          return; 
+          this.latestDate = parseTime(new Date(),'{yyyy}{mm}{dd}');
+          return;
         }
         this.latestDate = res.curDate;
       })
@@ -172,11 +170,9 @@ export default {
       getLatestDate({
         "statType": '3',
         "cityId": this.currentAreaId
-      }).then(res=>{
+      }).then(res => {
         if(res.curDate=='') {
-          let arr = new Date().toLocaleDateString().split('/');
-          arr[1] = Number(arr[1]) < 10 ? '0'+arr[1] : arr[1]; 
-          this.latestDate = `${arr[0]}${arr[1]}}`;
+          this.latestMonth = parseTime(new Date(),'{yyyy}{mm}');
           return; 
         }
         this.latestMonth = res.curDate;

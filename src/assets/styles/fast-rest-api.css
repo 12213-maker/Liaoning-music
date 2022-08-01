@@ -1,0 +1,304 @@
+@charset "UTF-8";
+/***************************  编辑页面&新增页面  *************************/
+/* rest-info */
+.rest-info {
+  margin-bottom: 10px;
+}
+
+.rest-info h4 {
+  margin: 0;
+}
+
+.rest-info .rest-interface {
+  width: 100%;
+  padding: 20px;
+}
+
+.rest-info .rest-interface .rest-base {
+  width: 100%;
+  height: auto;
+  padding: 0 20px 10px 20px;
+}
+
+.rest-base .el-form {
+  width: 100%;
+}
+
+.rest-base .e-link {
+  padding: 0 5px;
+  text-align: right;
+}
+
+.rest-base .el-textarea textarea {
+  height: 130px;
+}
+
+.rest-info .rest-interface .rest-json {
+  width: 100%;
+  font-size: 14px;
+  padding-right: 20px;
+}
+
+.rest-json h5 {
+  margin: 10px 0 0 0;
+  font-size: 14px;
+}
+
+.rest-json .json-box {
+  padding-left: 40px;
+  margin-top: 10px;
+  text-align: right;
+}
+
+.rest-json .json-box .el-textarea textarea {
+  width: 100%;
+  height: 300px;
+}
+
+/* rest-tpl */
+.jsoneditor-vue {
+  height: 300px;
+}
+
+/* jsoneditor右上角默认有一个链接,加css去掉了 */
+.jsoneditor-poweredBy {
+  display: none;
+}
+
+/* rest-sql */
+.rest-sql .rest-interface {
+  padding: 20px 0;
+  border-bottom: 1px solid #dfdfdf;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .arrow-icon {
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .question-icon {
+  cursor: pointer;
+  color: #378dff;
+  margin-right: 5px;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .el-form {
+  display: inline-block;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .el-form div {
+  margin: 0 10px 0 0;
+  display: inline-block;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .el-form div div {
+  display: inline-block;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .el-form div .el-form-item__label {
+  padding: 0;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .var-name .el-input {
+  width: 140px;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .sn .el-input {
+  width: 60px;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .var-type .el-input {
+  width: 110px;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .result-type .el-input {
+  width: 70px;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .edit-btn {
+  float: right;
+  padding-top: 3px;
+  color: #cccccc;
+  position: relative;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .edit-btn button {
+  color: #378dff;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .edit-btn .more-choose {
+  width: 60px;
+  height: 70px;
+  position: absolute;
+  left: 40px;
+  top: 32px;
+  z-index: 99;
+  padding: 5px 0;
+  background-color: white;
+  -webkit-box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.199);
+          box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.199);
+  border-radius: 2px;
+  display: none;
+}
+
+.rest-sql .rest-interface .rest-sql-head-info .edit-btn .more-choose button {
+  width: 100%;
+  height: 50%;
+}
+
+.rest-sql .iconarrow-down {
+  font-size: 20px;
+  display: inline-block;
+  -webkit-transform: rotate(-90deg);
+          transform: rotate(-90deg);
+}
+
+.rule-type {
+  font-size: 14px;
+  padding: 10px 20px 0 20px;
+  display: none;
+}
+
+.rule-type .el-form-item {
+  margin: 10px 0 0 0;
+}
+
+.rule-type textarea {
+  width: 95%;
+  height: 80px;
+}
+
+.rule-type .remark .el-input {
+  width: 95%;
+}
+
+/* base-btn */
+.base-btn {
+  padding-right: 20px;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.base-btn button {
+  margin: 0 15px;
+}
+
+#api-edit-content .base-btn {
+  margin-top: 0;
+}
+
+.app-container .pagination-container {
+  position: relative;
+  height: 30px;
+  margin: 15px 0;
+  padding: 0px 20px !important;
+}
+
+/***************************  调试功能子调试页面  *************************/
+.debug {
+  min-height: 600px;
+  padding: 20px 20px 0;
+  border-left: 2px solid #dfe4e9;
+}
+
+.debug .debug-show {
+  padding-bottom: 20px;
+}
+
+.debug .debug-show .debug-send-box {
+  width: 88%;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.debug .debug-show .el-checkbox .el-checkbox__label {
+  font-size: 16px;
+}
+
+.debug .el-form .el-form-item {
+  margin: 0;
+}
+
+.debug .el-tabs .el-tabs__header .el-tabs__nav {
+  padding: 10px 0;
+}
+
+.debug .el-tabs .el-tabs__header .el-tabs__nav .el-tabs__item {
+  padding: 0 20px;
+}
+
+.debug .el-tabs .radio-box > span {
+  color: #444444;
+}
+
+.debug .el-tabs .add-btn {
+  margin-bottom: 15px;
+}
+
+.debug .el-input-group__prepend {
+  background-color: #49cc90;
+  border-color: #49cc90;
+  color: #fff;
+}
+
+.debug .el-input-group__append {
+  background-color: #1890ff;
+  border-color: #1890ff;
+  color: #fff;
+}
+
+.debug > .response-info .el-menu--horizontal {
+  border-bottom: solid 2px #dfe4ed;
+}
+
+.debug > .response-info .el-menu--horizontal .el-menu-item.is-active {
+  height: 55px;
+  line-height: 54px;
+  color: #1890ff;
+  border: none;
+  position: relative;
+}
+
+.debug > .response-info .el-menu--horizontal .el-menu-item.is-active::after {
+  display: block;
+  position: absolute;
+  bottom: -2px;
+  content: "";
+  height: 2px;
+  width: 55px;
+  background-color: #1890ff;
+  z-index: 10;
+}
+
+/***************************  调试功能页面  *************************/
+.app-container .el-tabs .el-tabs__header {
+  margin-right: 0;
+}
+
+.app-container .el-tabs .el-tabs__header .el-tabs__item {
+  color: #000000A6;
+  font-size: 12px;
+}
+
+.app-container .el-tabs .el-tabs__header .el-tabs__item:hover {
+  color: #1890ff;
+}
+
+.app-container .el-tabs .el-tabs__header .el-tabs__item i {
+  margin-right: 5px;
+}
+
+.app-container .el-tabs .el-tabs__header .is-active {
+  color: #1890ff;
+}
+
+/***************************  调试功能子文档、配置页面  *************************/
+#doc, #edit {
+  border-left: 2px solid #dfe4e9;
+  padding-left: 20px;
+}
+/*# sourceMappingURL=fast-rest-api.css.map */

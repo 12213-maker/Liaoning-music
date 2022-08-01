@@ -81,3 +81,28 @@ export function getAccountNumber() {
 }
 
 
+//工信部投诉地市列表
+export function getCustomer_cityList(data){
+	return request({
+		url:'/api/rest-open-api/customer_cityList',
+		method:'post',
+		data:data
+	})
+}
+
+export function customer_complaint_info(data){
+	return request({
+		url:'/api/rest-open-api/customer_complaint_info',
+		method:'post',
+		data:data
+	})
+}
+
+export function customer_complaint_cityList(data){
+	return request({
+	url:'/api/rest-open-api/customer_complaint_cityList',
+	method:'post',
+	data:data	
+	})
+}
+

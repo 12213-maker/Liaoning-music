@@ -291,14 +291,22 @@
                         <div class="jp-progress">
                           <div class="jp-seek-bar"><div class="jp-play-bar"></div></div>
                         </div>
-                        <div class="jp-volume-controls">
-                          <button class="jp-mute" role="button" tabindex="0">mute</button>
-                          <div class="jp-volume-bar"><div class="jp-volume-bar-value"></div></div>
-                        </div>
                         <div class="jp-time-holder">
                           <span class="jp-current-time" role="timer" aria-label="time">&nbsp;</span>
                           <strong>/</strong>
                           <span class="jp-duration" role="timer" aria-label="duration">&nbsp;</span>
+                        </div>
+                        <div class="jp-volume-controls">
+                          <button class="jp-mute" role="button" tabindex="0">mute</button>
+                          <div class="jp-volume-bar"><div class="jp-volume-bar-value"></div></div>
+                        </div>
+                        <!-- 播放速度 -->
+                        <div class="jp-speed-box">
+                            <select id="currSpeed" >
+                               <template v-for="(speedItem, loopIndex) in SpeedArr">
+                                 <option :value="speedItem.key">{{speedItem.name}}</option>
+                               </template>
+                            </select>
                         </div>
                       </div>
                     </div>
@@ -484,14 +492,22 @@
                         <div class="jp-progress">
                           <div class="jp-seek-bar"><div class="jp-play-bar"></div></div>
                         </div>
-                        <div class="jp-volume-controls">
-                          <button class="jp-mute" role="button" tabindex="0">mute</button>
-                          <div class="jp-volume-bar"><div class="jp-volume-bar-value"></div></div>
-                        </div>
                         <div class="jp-time-holder">
                           <span class="jp-current-time" role="timer" aria-label="time">&nbsp;</span>
                           <strong>/</strong>
                           <span class="jp-duration" role="timer" aria-label="duration">&nbsp;</span>
+                        </div>
+                        <div class="jp-volume-controls">
+                          <button class="jp-mute" role="button" tabindex="0">mute</button>
+                          <div class="jp-volume-bar"><div class="jp-volume-bar-value"></div></div>
+                        </div>
+                        <!-- 播放速度 -->
+                        <div class="jp-speed-box">
+                            <select id="repeatSpeed" >
+                               <template v-for="(speedItem, loopIndex) in SpeedArr">
+                                 <option :value="speedItem.key">{{speedItem.name}}</option>
+                               </template>
+                            </select>
                         </div>
                       </div>
                     </div>
@@ -579,6 +595,12 @@ export default {
         { key: '一般', name: '一般' },
         { key: '未知', name: '未知' },
         { key: '满意', name: '满意' }
+      ],
+      SpeedArr:[
+         { key: '1', name: '1.0' },
+         { key: '1.25', name: '1.25' },
+         { key: '1.5', name: '1.5' },
+         { key: '2', name: '2.0' }
       ],
       queryForm: {
         arcTimeBegin: '',
@@ -888,6 +910,15 @@ export default {
             remainingDuration: false,
             toggleDuration: true
           });
+          $("#currSpeed").on('change',function(){
+              //自动以定速播放
+              let _currVideo =$("#jquery_jplayer_1").find("audio");
+              let _currSpeed= parseInt($("#currSpeed").val());
+              if(_currVideo.length > 0 ){
+                 _self.JplayerObj.jPlayer("option", "defaultPlaybackRate",_currSpeed);
+                 _self.JplayerObj.jPlayer("option", "playbackRate",_currSpeed);
+              }
+          })
           //自动播放第一条记录
           if(_self.currRecordDetailList.length > 0){
              _self.playMp3(0);
@@ -951,6 +982,13 @@ export default {
             .jPlayer('setMedia', {
               mp3: window.URL.createObjectURL(blobObject)
             }).jPlayer('play');
+          //自动以定速播放
+          let _currVideo =$("#jquery_jplayer_1").find("audio");
+          let _currSpeed= parseInt($("#currSpeed").val());
+          if(_currVideo.length > 0 ){
+             _self.JplayerObj.jPlayer("option", "defaultPlaybackRate",_currSpeed);
+             _self.JplayerObj.jPlayer("option", "playbackRate",_currSpeed);
+          }
       });
       //mp3文件加载中提示
      this.$notify({
@@ -1022,6 +1060,15 @@ export default {
             remainingDuration: false,
             toggleDuration: true
           });
+          $("#repeatSpeed").on('change',function(){
+            //自动以定速播放
+            let _currVideo =$("#jquery_jplayer_repeat").find("audio");
+            let _currSpeed= parseInt($("#repeatSpeed").val());
+            if(_currVideo.length > 0 ){
+               _self.JplayerRepeatObj.jPlayer("option", "defaultPlaybackRate",_currSpeed);
+               _self.JplayerRepeatObj.jPlayer("option", "playbackRate",_currSpeed);
+            }
+          })
           //自动播放
           if(_self.repeatRecordDetailList.length > 0){
              _self.playRepeatMp3(0);
@@ -1058,6 +1105,14 @@ export default {
             mp3: URL.createObjectURL(blob)
           })
           .jPlayer('play');
+          //自动以定速播放
+          let _currVideo =$("#jquery_jplayer_repeat").find("audio");
+          let _currSpeed= parseInt($("#repeatSpeed").val());
+          if(_currVideo.length > 0 ){
+             _self.JplayerRepeatObj.jPlayer("option", "defaultPlaybackRate",_currSpeed);
+             _self.JplayerRepeatObj.jPlayer("option", "playbackRate",_currSpeed);
+          }
+
       });
       //mp3文件加载中提示
       this.$notify({
@@ -1122,6 +1177,7 @@ export default {
           this.JplayerObj.jPlayer('stop');
         }
       }
+
       if(itemObj.orderId==null){
         var dataParamObj={
              "majorId":itemObj.majorId,
@@ -1133,7 +1189,7 @@ export default {
           console.log(response.data);
           if (response.state == 200) {
             //跳转至王楠-发起听音问题单路由
-            _self.$router.push('/stationStoreQuestionEdit/1/0/' +  response.data['infoItem'].orderId);
+            _self.$router.push('/stationStoreQuestionEdit/1/'+itemObj.wrkfmShowSwftno+'/'+response.data['infoItem'].orderId);
           } else {
             _self.$notify({
               title: '温馨提示',
@@ -1145,7 +1201,7 @@ export default {
         });
       }else{
          //跳转至王楠-发起听音问题单路由
-         this.$router.push('/stationStoreQuestionEdit/1/0/' + itemObj.orderId);
+         this.$router.push('/stationStoreQuestionEdit/1/'+itemObj.wrkfmShowSwftno+'/'+itemObj.orderId);
       }
     },
     //返回精选
@@ -1155,6 +1211,6 @@ export default {
   }
 };
 </script>
-<style lang="css">
+<style lang="css" >
 @import "../../../assets/styles/audition.css";
 </style>

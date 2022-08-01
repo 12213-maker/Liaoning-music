@@ -22,6 +22,7 @@
         :colors="chartColors"
         :barValue="innerTab.overviewData.barValue"
         :lineValue="innerTab.overviewData.lineValue"
+        :min = 'undefined'
         ></LineBarChart>
       </el-tab-pane>
     </el-tabs>

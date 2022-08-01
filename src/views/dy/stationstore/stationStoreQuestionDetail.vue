@@ -38,22 +38,25 @@
             {{applyForm.applyTheme}}
 <!--            <el-input v-model="applyForm.applyTheme"></el-input>-->
           </el-form-item>
-          <el-form-item label="地点/听音单号:" prop="contactInfo" v-if="applyForm.sourceType=='站店问题'">
-<!--            <el-input v-model="applyForm.contactInfo"></el-input>-->
+          <el-form-item v-if="applyForm.sourceType=='听音问题'" label="投诉工单编号:">
+            {{applyForm.sourceId}}
+          </el-form-item>
+          <el-form-item v-if="applyForm.sourceType!='听音问题'" label="触点信息:" prop="contactInfo">
             {{applyForm.contactInfo}}
           </el-form-item>
-          <el-form-item label="触点类型:" prop="contactType">
-            {{applyForm.contactType}}
-            <span v-if="applyForm.contactType=='其他:'">-{{applyForm.contactName}}</span>
-<!--            <el-radio-group v-model="applyForm.applyLine">-->
-<!--              <el-radio label="营业厅"></el-radio>-->
-<!--              <el-radio label="装维随同"></el-radio>-->
-<!--              <el-radio label="网格行销"></el-radio>-->
-<!--              <el-radio label="政企集团随销"></el-radio>-->
-<!--              <el-radio label="10086热线旁听"></el-radio>-->
-<!--              <el-radio label="其他"></el-radio>-->
-<!--            </el-radio-group>-->
-          </el-form-item>
+
+<!--          <el-form-item label="触点类型:" prop="contactType">-->
+<!--            {{applyForm.contactType}}-->
+<!--            <span v-if="applyForm.contactType=='其他:'">-{{applyForm.contactName}}</span>-->
+<!--&lt;!&ndash;            <el-radio-group v-model="applyForm.applyLine">&ndash;&gt;-->
+<!--&lt;!&ndash;              <el-radio label="营业厅"></el-radio>&ndash;&gt;-->
+<!--&lt;!&ndash;              <el-radio label="装维随同"></el-radio>&ndash;&gt;-->
+<!--&lt;!&ndash;              <el-radio label="网格行销"></el-radio>&ndash;&gt;-->
+<!--&lt;!&ndash;              <el-radio label="政企集团随销"></el-radio>&ndash;&gt;-->
+<!--&lt;!&ndash;              <el-radio label="10086热线旁听"></el-radio>&ndash;&gt;-->
+<!--&lt;!&ndash;              <el-radio label="其他"></el-radio>&ndash;&gt;-->
+<!--&lt;!&ndash;            </el-radio-group>&ndash;&gt;-->
+<!--          </el-form-item>-->
           <el-form-item label="目标:" prop="target">
             {{applyForm.target}}
 <!--            <el-input type="textarea" v-model="applyForm.target"></el-input>-->
@@ -73,10 +76,10 @@
 <!--              <el-radio label="支撑"></el-radio>-->
 <!--            </el-radio-group>-->
           </el-form-item>
-          <el-form-item label="问题情况分类（一级）:" required>
+          <el-form-item label="问题分类:" required>
             <el-col :span="11">
-              <el-form-item prop="questionCategory1">
-                {{applyForm.questionCategory1}}
+              <el-form-item prop="questionCategory">
+                {{applyForm.questionCategory2}}
 <!--                <el-select v-model="applyForm.questionCategory1" placeholder="问题情况分类（一级）">-->
 <!--&lt;!&ndash;                  <el-option&ndash;&gt;-->
 <!--&lt;!&ndash;                    v-for="item in questionCategoryOptions1"&ndash;&gt;-->
@@ -89,12 +92,12 @@
               </el-form-item>
             </el-col>
             <el-col :span="13">
-              <el-form-item prop="questionCategory2" label="问题情况分类（二级）:">
-                {{applyForm.questionCategory2}}
-<!--                <el-input v-model="applyForm.questionCategory2" placeholder="问题情况分类（二级）">-->
+<!--              <el-form-item prop="questionCategory2" label="问题情况分类（二级）:">-->
+<!--                {{applyForm.questionCategory2}}-->
+<!--&lt;!&ndash;                <el-input v-model="applyForm.questionCategory2" placeholder="问题情况分类（二级）">&ndash;&gt;-->
 
-<!--                </el-input>-->
-              </el-form-item>
+<!--&lt;!&ndash;                </el-input>&ndash;&gt;-->
+<!--              </el-form-item>-->
             </el-col>
           </el-form-item>
           <el-form-item label="对标端到端服务过程质量管理体系，哪项流程/控制点/KQI缺失:" prop="lackOfQuality">

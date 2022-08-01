@@ -148,6 +148,7 @@
             align="center"
             width="auto"
             min-width="120px" 
+            key="identifier"
           >
           </el-table-column>
            <el-table-column
@@ -157,6 +158,7 @@
             show-overflow-tooltip
             width="auto"
             min-width="120px"
+            key="title"
           ></el-table-column>
            <el-table-column
             prop="identyTypeTrans"
@@ -164,6 +166,7 @@
             width="100"
             align="center"
             min-width="auto"
+            key="identyTypeTrans"
           >
           </el-table-column>
           <el-table-column
@@ -172,29 +175,27 @@
             align="center"
             width="190"
             min-width="auto"
+            key="identySubtypeTrans"
           >
             <!-- <template slot-scope="scope">
               {{ scope.row.identySubtype | identySubtypeCode }}
             </template> -->
           </el-table-column>
-
-
          
           <el-table-column
             prop="creatTime"
             label="创建时间"
             align="center"
             width="100"
+            key="creatTime"
           >
-            <!-- <template slot-scope="scope">
-              {{ scope.row.processVariables.creatTime | DataFormat }}
-            </template> -->
           </el-table-column>
           <el-table-column
             prop="processTime"
             label="处理时限"
             align="center"
             width="160"
+            key="processTime"
           >
             <template slot-scope="scope">
               <span 
@@ -203,18 +204,34 @@
               </span>
             </template>             
           </el-table-column>
+
+          <el-table-column
+            prop="remainingTime"
+            label="剩余处理时长"
+            align="center"
+            width="120"
+            v-if="originId=='1'"
+            key="remainingTime"
+          >
+                        
+          </el-table-column>
+
           <el-table-column
             prop="originUnitTrans"
             label="工单来源"
             align="center"
-            width="auto"
+            width="90"
+            key="originUnitTrans"
           >
+            <!-- <template slot-scope="scope">
+              {{ scope.row.originUnitTrans?scope.row.originUnitTrans:'-' }}
+            </template> -->
           </el-table-column>
 
-          <el-table-column label="工单接收方" width="90" align="center">
-            <template slot-scope="scope">
+          <el-table-column label="工单接收方" width="90" align="center" prop="receiverUnitTrans">
+            <!-- <template slot-scope="scope">
               {{ scope.row.receiverUnitTrans?scope.row.receiverUnitTrans:'-' }}
-            </template>
+            </template> -->
           </el-table-column>
 
           <el-table-column
@@ -223,21 +240,22 @@
             align="center"
             width="80"
             :formatter="formatStatus"
+            key="identyStatus"
           >
            
           </el-table-column>
 
-          <el-table-column prop="auditorName" label="接口人" align="center" width="80" v-if="originId=='1'">
+          <el-table-column prop="auditorName" label="接口人" align="center" width="80" v-if="originId=='1'" key="auditorName">
             <template slot-scope="scope">
               {{ scope.row.auditorName?scope.row.auditorName:'-' }}
             </template>
           </el-table-column>
 
-          <el-table-column prop="auditor" label="当前待办人" align="center" width="90" >
+          <!-- <el-table-column prop="userDisplayName" label="当前待办人" align="center" width="90" >
             <template slot-scope="scope">
-              {{ scope.row.userDisplayName?scope.row.userDisplayName:'-' }}
+              {{scope.row.userDisplayName?scope.row.userDisplayName:'-'}}
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
           <el-table-column
             style="border-right: 1px"
@@ -245,6 +263,7 @@
             label="操作"
             align="center"
             width="160"
+            key="operator"
           >
             <template slot-scope="scope">
               <el-button
@@ -626,11 +645,14 @@ export default {
     },
 
     formatStatus(row,column, cellval) {
-      return this.identyStatus && this.identyStatus.get(cellval);
+      if(this.identyStatus) {
+        return this.identyStatus.get(cellval);
+      }
+      return '-'; 
     },
 
     formatterTimeColor(row) {
-      if(row.timeoutDay == '1' && row.identyStatus != '03' && row.identyStatus != '' && row.identyStatus.toString() != 'null') {
+      if(row.timeoutDay == '1' && row.identyStatus && row.identyStatus != '03') {
         return 'red';
       }
       return '#595959';
@@ -684,6 +706,11 @@ export default {
             return item.roleId;
           })
           data.roleId = roleIds;
+          let areaId = sessionStorage.getItem('areaId');
+          if(areaId=='999') {
+            areaId = sessionStorage.getItem('cityId');
+          }
+          data.area = areaId;
         }
 
         const {obj} = await TaskList(data);

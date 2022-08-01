@@ -21,7 +21,7 @@
             :filter-node-method="filterNode"
             ref="tree"
             default-expand-all
-            @node-click="handleNodeClick"
+            @node-click="handleNodeCheck"
           />
         </div>
       </el-col> -->
@@ -297,6 +297,30 @@
             </el-form-item>
           </el-col>
 
+          <el-col :span="12">
+            <el-form-item label="用户菜单">
+              <el-select
+              ref='select' 
+              v-model="checkedMenuNames" 
+              placeholder="修改菜单"
+              popper-class="dept-popper"
+              style="width: 80%;">
+                  <el-option :value="value2" style="min-height: 260px;height:auto;">
+                    <el-tree
+                    ref="menuTree"
+                    style="height:100%"
+                    show-checkbox
+                    :data="treeMenus"  
+                    node-key="menuId"
+                    :props="{
+                      label:'menuName'
+                    }"
+                    @check-change="handleMenuCheck"></el-tree>
+                  </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
         </el-row>
         <el-row>
           <el-col :span="24">
@@ -367,6 +391,7 @@
   components: { Treeselect },
   data() {
     return {
+      value2:'',
       // 遮罩层
       loading: true,
       // 选中数组
@@ -456,7 +481,11 @@
             trigger: "blur"
           }
         ]
-      }
+      },
+
+      checkMenuIds:[],
+      treeMenus:[],
+      checkedMenuNames:''
     };
   },
   watch: {
@@ -501,7 +530,7 @@
       return data.label.indexOf(value) !== -1;
     },
     // 节点单击事件
-    handleNodeClick(data) {
+    handleNodeCheck(data) {
       this.queryParams.deptId = data.id;
       this.getList();
     },
@@ -540,7 +569,8 @@
         remark: undefined,
         postIds: [],
         roleIds: [],
-        param1:''
+        param1:'',
+        param5:'',
       };
       this.resetForm("form");
     },
@@ -580,6 +610,9 @@
       const userId = row.userId || this.ids;
       getUser(userId).then(response => {
         this.form = response.data;
+        this.treeMenus = response.treeMenus;
+        console.warn('this.treeMenus',this.treeMenus)
+        this.checkMenuIds = response.checkMenuIds;
         this.postOptions = response.posts;
         this.roleOptions = response.roles;
         this.form.postIds = response.postIds;
@@ -587,7 +620,27 @@
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";
+        setTimeout(()=>{
+          console.log(this.$refs.menuTree)
+          this.$refs.menuTree.setCheckedKeys(this.checkMenuIds);
+        },100)
+        
       });
+    },
+
+    handleMenuCheck(node, checked) {
+      const checkedNodes = this.$refs.menuTree.getCheckedNodes();
+      const checkedMenu = checkedNodes.map(item=>{
+        return item.menuId;
+      })
+
+      const checkedMenuNames = checkedNodes.map(item=>{
+        return item.menuName;
+      })
+
+      this.checkedMenuNames = checkedMenuNames.join(',');
+
+      this.form.param5 = checkedMenu.join(',');
     },
     /** 重置密码按钮操作 */
     handleResetPwd(row) {

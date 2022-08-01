@@ -34,16 +34,17 @@ export default {
     height: String,
     tableData: Array,
     labelName: String,
-    lengendTitles: Array
+    lengendTitles: Array,
+    totalCount:Number|String
   },
   data() {
     return {
       colorMap: [
         "#FFFFFF",
-        "#F98781",
+        "#3499FF",
         "#FFC06F",
         "#84C285",
-        "#3499FF",
+        "#F98781",
         "#42ABFF",
         "#FDAC15",
         "#FF4248",
@@ -72,25 +73,23 @@ export default {
   },
   mounted() {
     this.drawChart();
-    console.log(this.datas);
   },
   watch: {
-    /*tableData() {
+    tableData() {
       this.drawChart();
-    },*/
+    },
   },
   methods: {
     drawChart() {
       let that = this;
       const myChart = this.$echarts.init(this.$refs.pieChart);
-      let totalCount = 0;
-      this.tableData.forEach((e,idx) => {
+      let totalCount = this.totalCount;
+      /*this.tableData.forEach((e,idx) => {
         totalCount += Number(e.score);
         if (idx!=0) {
-          console.log(e.partrate)
           e.partrate = e.partrate<1?(Number(e.partrate) * 100).toFixed(2):e.partrate;
         }
-      });
+      });*/
       let option = {
         tooltip: {
           show: false,
@@ -210,7 +209,6 @@ export default {
               label: {
                 show: true,
                 formatter:(params)=>{
-                  console.log(params)
                   if(params.dataIndex==0) return; 
                   return `{name|${params.name}}\n{val|${params.value}}`;
                 },

@@ -1,1 +1,28 @@
-@font-face{font-family:syht;src:url(SourceHanSansSC-Regular.otf);font-weight:400;font-style:normal}@font-face{font-family:syhtMedium;src:url(SourceHanSansSC-Medium.otf);font-weight:400;font-style:normal}@font-face{font-family:syhtLight;src:url(SourceHanSansSC-Light.otf);font-weight:400;font-style:normal}@font-face{font-family:syhtNoraml;src:url(SourceHanSansSC-Normal.otf);font-weight:400;font-style:normal}
+@font-face {
+  font-family: 'syht';
+  src: url("SourceHanSansSC-Regular.otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'syhtMedium';
+  src: url("SourceHanSansSC-Medium.otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'syhtLight';
+  src: url("SourceHanSansSC-Light.otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'syhtNoraml';
+  src: url("SourceHanSansSC-Normal.otf");
+  font-weight: normal;
+  font-style: normal;
+}
+/*# sourceMappingURL=font.css.map */

@@ -774,7 +774,9 @@ export default
                 "id": "99",
                 "name": "其他性问题"
               }
-          ],
+            ],
+
+            
             "layout": null
           },
           {
@@ -783,7 +785,7 @@ export default
             "name": "问题分类",
             "showExp": "identyDetail",
             "showIf": "02,03,04",
-            "type": "cascader",
+            "type": "problemType",
             "value": null,
             "required": true,
             "readOnly": false,
@@ -877,7 +879,7 @@ export default
             "name": "问题分类",
             "showExp": "identyDetail",
             "showIf": "01",
-            "type": "cascader",
+            "type": "problemType3",
             "value": null,
             "required": true,
             "readOnly": false,
@@ -887,64 +889,82 @@ export default
               "showType": "0",
               "order": 10
             },
+            "layout": null,
             "options": [{
               "child": [
-                  {
-                    "id": "01",
-                    "name": "无线网络"
-                  },
-                  {
-                    "id": "02",
-                    "name": "家宽网络"
-                  },
-                ],
-                "id": "10",
-                "name": "网络质量"
+                {
+                  "id": "01",
+                  "name": "无线网络"
+                },
+                {
+                  "id": "02",
+                  "name": "家宽网络"
+                },
+              ],
+              "id": "10",
+              "name": "网络质量"
+            },
+            {
+              "child": [
+                {
+                  "id": "01",
+                  "name": "个人产品"
+                }, {
+                  "id": "02",
+                  "name": "家庭产品"
+                },
+                {
+                  "id": "03",
+                  "name": "政企产品"
+                }, {
+                  "id": "04",
+                  "name": "新兴产品"
+                },
+              ],
+              "id": "11",
+              "name": "产品质量"
+            }, {
+              "child": [{
+                "id": "01",
+                "name": "社会渠道"
+              }, {
+                "id": "02",
+                "name": "营业厅"
               },
               {
-                "child": [
-                  {
-                    "id": "01",
-                    "name": "个人产品"
-                  }, {
-                    "id": "02",
-                    "name": "家庭产品"
-                  },
-                  {
-                    "id": "03",
-                    "name": "政企产品"
-                  }, {
-                    "id": "04",
-                    "name": "新兴产品"
-                  },
-                ],
-                "id": "11",
-                "name": "产品质量"
+                "id": "03",
+                "name": "App"
               }, {
-                "child": [
-                  {
-                    "id": "01",
-                    "name": "社会渠道"
-                  }, {
-                    "id": "02",
-                    "name": "营业厅"
-                  },
-                  {
-                    "id": "03",
-                    "name": "App"
-                  }, {
-                    "id": "04",
-                    "name": "热线"
-                  },
-                  {
-                    "id": "05",
-                    "name": "其它"
-                  },
-                ],
-                "id": "12",
-                "name": "触点质量"
-            }],
-            "layout": null
+                "id": "04",
+                "name": "热线"
+              },
+              {
+                "id": "05",
+                "name": "其它"
+              },
+              ],
+              "id": "12",
+              "name": "触点质量"
+            }, {
+              "child": [{
+                "id": "01",
+                "name": "工作环境"
+              }, {
+                "id": "02",
+                "name": "考核激励"
+              },
+              {
+                "id": "03",
+                "name": "成长发展"
+              }, {
+                "id": "99",
+                "name": "其他"
+              }
+              ],
+              "id": "13",
+              "name": "其他"
+            }
+            ],
           },
            
           {

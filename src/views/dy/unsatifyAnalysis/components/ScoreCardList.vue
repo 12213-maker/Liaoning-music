@@ -6,7 +6,7 @@
     v-for="(item,index) in cardList"
     :key="index">
       <LineCard
-      :style="{height:index>3?'300px':'260px'}"
+      :style="{height:'100%'}"
       :data="item" 
       :order="index"/>
     </div>
@@ -35,6 +35,7 @@ export default {
       }
     }
   },
+  
   methods: {
     getCustomerAll() {
       this.loading = true;
@@ -43,7 +44,7 @@ export default {
         "id": this.id
       })
       .then(res=>{
-        if(res.data) {
+        if( res.hasDataNow > 0 ) {
           this.cardList = res.data.mainList.map(item=>{
             const {label_name,group_score,label_id,mom_rate,satisfied_label} = {...item};
             return {
@@ -60,13 +61,21 @@ export default {
             }
           })
           this.$emit('changeShow',true);
-        } else {
-          this.$emit('changeShow',false);
         }
 
+        if( res.hasDataNow == 0 ) {
+          this.cardList = [];
+          this.$emit('changeShow',false,'本月无数据！');
+        }
+
+        if( res.hasData == 0 ) {
+          this.cardList = [];
+          this.$emit('changeShow',false,'数据正在加工中，请第二天再进行查看！');
+        }
       })
       .catch(err=>{
-        this.$emit('changeShow',false);
+        this.cardList = [];
+        this.$emit('changeShow',false,'请求失败，稍后再试！');
       })
       .finally(()=>{
         this.loading = false;
@@ -74,7 +83,8 @@ export default {
     }
   },
   mounted() {
-    this.getCustomerAll();
+    this.loading = true;
+    if(this.date) this.getCustomerAll();
   }
 };
 </script>
@@ -82,16 +92,16 @@ export default {
 <style lang="scss">
 .card-list-wrap {
   width:100%; 
-  height:auto; 
+  min-height:500px; 
   display:flex; 
-  column-gap:24px; 
-  row-gap:24px; 
   flex-wrap:wrap;
 
   .card {
     width:20%; 
     flex-grow:2; 
     height:auto;
+    margin-right:24px;
+    margin-bottom:24px;
   }
 }
 
