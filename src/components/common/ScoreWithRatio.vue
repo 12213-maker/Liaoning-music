@@ -2,7 +2,7 @@
 <template>
   <div>
     <div class="score-width-ratio-wrap">
-      <span style="font-size:24px;">{{data.group_score}}</span>
+      <span style="font-size:24px;">{{data.group_score?data.group_score:'-'}}</span>
       <span style="font-size:14px;color:#8c8c8c; margin:0 20px 0 8px;">分</span> 
       <span style="font-size:14px;color:#595959; ">环比：</span>
       <Arrow :num="Number(data.mom_rate)" unit="pp" style="display:inline-block;"/>

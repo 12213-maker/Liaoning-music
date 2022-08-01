@@ -51,7 +51,7 @@
             ></el-input>
           </el-form-item>
           <!-- 验证码 -->
-          <el-form-item prop="code">
+          <!-- <el-form-item prop="code">
             <el-row>
               <el-col :span="12">
                 <el-input
@@ -68,7 +68,7 @@
                 <img class="pointer" :src="codeUrl" @click="getCode" />
               </el-col>
             </el-row>
-          </el-form-item>
+          </el-form-item> -->
 
           <!-- 记住用户名 -->
           <el-checkbox v-model="loginForm.rememberMe">记住用户名密码</el-checkbox>

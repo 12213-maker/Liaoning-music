@@ -20,6 +20,8 @@
                 format="yyyy年MM月dd日"
                 value-format="yyyy-MM-dd"
                 range-separator="-"
+                :picker-options="pickerOptions"
+                :clearable="true"
                 style="width:298px;">
               </el-date-picker>
               <img src='@/assets/images/riqi.png' style="position:absolute; right:10px; top:8px;">
@@ -77,7 +79,8 @@
             prop="fix_rate" 
             label="修复率" 
             align="center" 
-            width="194">
+            width="230"
+            min-width="230">
               <template slot-scope="scope">
                 <Progress :data="scope.row.fix_rate"/>
               </template>
@@ -163,7 +166,13 @@ export default {
         pageSize: 10
       },
 
-      cityId: sessionStorage.getItem('cityId')
+      cityId: sessionStorage.getItem('cityId'),
+
+      pickerOptions:{
+        disabledDate:(date)=>{
+          return date.getTime() > new Date().getTime();
+        }
+      }
     };
   },
   
@@ -254,7 +263,7 @@ export default {
   .content {
     width: 100%; 
     height: auto; 
-    min-height:400px;
+    min-height:500px;
     background: #fff; 
     margin-top: 14px;
     padding: 0 24px;

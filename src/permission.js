@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
                 next({ path: menus[0].children[0].children[0].path, replace: true })
               }
             } else {
-              next('/permission');
+              next('/nomenus');
             }
             Vue.$loadingIns && Vue.$loadingIns.close();
             NProgress.done()

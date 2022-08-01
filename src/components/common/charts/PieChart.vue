@@ -207,7 +207,6 @@ export default {
               label: {
                 show: true,
                 formatter:(params)=>{
-                  console.log(params)
                   if(params.dataIndex==0) return; 
                   return `{name|${params.name}}\n{val|${params.value}}`;
                 },

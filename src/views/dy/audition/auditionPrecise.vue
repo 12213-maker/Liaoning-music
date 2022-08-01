@@ -232,6 +232,15 @@
                         <strong>/</strong>
                         <span class="jp-duration" role="timer" aria-label="duration">&nbsp;</span>
                       </div>
+                      <!-- 播放速度 -->
+                      <div class="jp-speed-box">
+                          <select id="currSpeed" >
+                             <template v-for="(speedItem, loopIndex) in SpeedArr">
+                               <option :value="speedItem.key">{{speedItem.name}}</option>
+                             </template>
+                          </select>
+                      </div>
+
                     </div>
                   </div>
                 </div>
@@ -425,6 +434,15 @@
                         <strong>/</strong>
                         <span class="jp-duration" role="timer" aria-label="duration">&nbsp;</span>
                       </div>
+                      <!-- 播放速度 -->
+                      <div class="jp-speed-box">
+                          <select id="repeatSpeed" >
+                             <template v-for="(speedItem, loopIndex) in SpeedArr">
+                               <option :value="speedItem.key">{{speedItem.name}}</option>
+                             </template>
+                          </select>
+                      </div>
+
                     </div>
                   </div>
                 </div>
@@ -498,7 +516,6 @@ export default {
       FullList: [],
       PreciseList: [],
       PreciseTop5List: [],
-
       fullscreenLoading: false,
       //当前工单详情
       currDialogVisible: false,
@@ -516,7 +533,13 @@ export default {
       repeatRepeatedList: [],
       repeatRecordList: [],
       repeatRepeatActive: 0,
-      JplayerRepeatObj: $('#jquery_jplayer_repeat')
+      JplayerRepeatObj: $('#jquery_jplayer_repeat'),
+      SpeedArr:[
+         { key: '1', name: '1.0' },
+         { key: '1.25', name: '1.25' },
+         { key: '1.5', name: '1.5' },
+         { key: '2', name: '2.0' }
+      ],
     };
   },
   mounted() {
@@ -648,8 +671,9 @@ export default {
       _self.currRepeatedList = [];
       _self.currRecordList = [];
       _self.currActive = 0;
-     /* paramItem['value'] = 'E00AF4DE7EA7073AE0532C50440AE1C4';
-      paramItem['cnt1'] = 20220524; */
+      //paramItem['value'] = 'E00AF4DE7EA7073AE0532C50440AE1C4';
+      //paramItem['value'] = 'E00AF4DE77D5073AE0532C50440AE1C4'
+      //paramItem['cnt1'] = 20220524;
       let dataParam = {
         majorId: paramItem['value'],
         opTime: paramItem['cnt1'],
@@ -705,6 +729,14 @@ export default {
             remainingDuration: false,
             toggleDuration: true
           });
+          $("#currSpeed").on('change',function(){
+              let _currVideo =$("#jquery_jplayer_1").find("audio");
+              let _currSpeed= parseInt($("#currSpeed").val());
+              if(_currVideo.length > 0 ){
+                 _self.JplayerObj.jPlayer("option", "defaultPlaybackRate",_currSpeed);
+                 _self.JplayerObj.jPlayer("option", "playbackRate",_currSpeed);
+              }
+          })
           //自动播放第一条记录
           if(_self.currRecordDetailList.length > 0){
              _self.playMp3(0);
@@ -759,6 +791,7 @@ export default {
         callSwftno: recordItem['callSwftno'],
         reoverKey: recordItem['reoverKey']
       };
+
       getOpenApiStream(dataParamObj).then(res => {
         const content = res;
         const blob = new Blob([content]);
@@ -767,6 +800,14 @@ export default {
             mp3: URL.createObjectURL(blob)
           })
           .jPlayer('play');
+          //自动以定速播放
+          let _currVideo =$("#jquery_jplayer_1").find("audio");
+          let _currSpeed= parseInt($("#currSpeed").val());
+          if(_currVideo.length > 0 ){
+             _self.JplayerObj.jPlayer("option", "defaultPlaybackRate",_currSpeed);
+             _self.JplayerObj.jPlayer("option", "playbackRate",_currSpeed);
+          }
+
       });
       //mp3文件加载中提示
       this.$notify({
@@ -838,6 +879,15 @@ export default {
              remainingDuration: false,
              toggleDuration: true
            });
+           //播放速度切换
+           $("#repeatSpeed").on('change',function(){
+                 let _currVideo =$("#jquery_jplayer_repeat").find("audio");
+                 let _currSpeed= parseInt($("#repeatSpeed").val());
+                 if(_currVideo.length > 0 ){
+                    _self.JplayerRepeatObj.jPlayer("option", "defaultPlaybackRate",_currSpeed);
+                    _self.JplayerRepeatObj.jPlayer("option", "playbackRate",_currSpeed);
+                 }
+           })
            //自动播放第一条记录
            if(_self.repeatRecordDetailList.length > 0){
               _self.playRepeatMp3(0);
@@ -873,6 +923,14 @@ export default {
             mp3: URL.createObjectURL(blob)
           })
           .jPlayer('play');
+          //自动以定速播放
+          let _currVideo =$("#jquery_jplayer_repeat").find("audio");
+          let _currSpeed= parseInt($("#repeatSpeed").val());
+          if(_currVideo.length > 0 ){
+             _self.JplayerRepeatObj.jPlayer("option", "defaultPlaybackRate",_currSpeed);
+             _self.JplayerRepeatObj.jPlayer("option", "playbackRate",_currSpeed);
+          }
+
       });
       //mp3文件加载中提示
       this.$notify({
@@ -947,7 +1005,7 @@ export default {
          console.log(response.data);
          if (response.state == 200) {
            //跳转至王楠-发起听音问题单路由
-           _self.$router.push('/stationStoreQuestionEdit/1/0/' +  response.data['infoItem'].orderId);
+           _self.$router.push('/stationStoreQuestionEdit/1/'+itemObj.wrkfmShowSwftno+'/'+response.data['infoItem'].orderId);
          } else {
            _self.$notify({
              title: '温馨提示',
@@ -959,7 +1017,7 @@ export default {
        });
      }else{
         //跳转至王楠-发起听音问题单路由
-        this.$router.push('/stationStoreQuestionEdit/1/0/' + itemObj.orderId);
+        this.$router.push('/stationStoreQuestionEdit/1/'+itemObj.wrkfmShowSwftno+'/'+itemObj.orderId);
      }
 
     }

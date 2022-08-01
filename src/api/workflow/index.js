@@ -122,3 +122,13 @@ export function getStationStoreDetail(id) {
     method: 'post'
   })
 }
+
+
+// 获取问题分类
+export function getProblemType(params) {
+  return request({
+    url: '/Sound/getProblemType',
+    method: 'get',
+    params
+  })
+}

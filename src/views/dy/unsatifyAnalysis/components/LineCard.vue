@@ -14,7 +14,13 @@
         <a class="title">{{item.label_name}}</a>
         <a class="score">
           <span class="text">{{item.group_score?Number(item.group_score).toFixed(1)+'分':'-'}}</span>
-          <Arrow :num="Number(item.mom_rate)" unit="pp" fontFamily="syht" style="font-size:14px;"/>
+          <Arrow 
+          :num="Number(item.mom_rate)" 
+          unit="pp" 
+          fontFamily="syht"
+          marginRight="14px" 
+          textWidth="50px"
+          style="font-size:14px;"/>
         </a>
       </p>
     </div>
@@ -42,7 +48,12 @@
           }
       },
       watch: {
-         
+         data:{
+          deep:true,
+          handler() {
+            this.initChart(this.data.trendLists);
+          }
+         }
       },
       computed:{
 
@@ -118,20 +129,24 @@
                   type:'dashed'
                 }
               },
-              formatter: function(params) {
+              formatter: (params) => {
                 var tipHtml = '';
-                var op_time = (params[0].data.op_time).split('-');
-                tipHtml = 
-                `<div style="max-height:56px;width:auto;border-radius:4px;background:rgba(255,255,255,0.8);box-shadow:0 4px 4px 1px rgba(99,99,99,0.19); padding:4px 12px;  box-sizing:border-box; display:flex; flex-direction:column; justify-content: space-around;font-family: SourceHanSansSC-Light; font-size:12px; color:#8c8c8c">
-                    <div style='margin:0px; display:flex; align-items:center; height:24px;'>
-                      <img style='margin-right:4px;' src="${fuhao}" />${_this.data.targetName}
-                    </div>
-                    <div style='height:24px; display:flex; align-items:center;'>
-                      <a style='display:inline-block; width:2px; height: 10px; background:#FF9900;margin-left:2px'></a>
-                      <span style='margin-left:16px'>${op_time[0]}年${op_time[1]}月&nbsp;&nbsp;&nbsp;</span>
-                      <span>${params[0].data.value}分</span>
-                    </div>
-                  </div>`;
+                // console.log(params[0].data.op_time)
+                if(params[0].data.op_time&&params[0].data.value) {
+                  var op_time = (params[0].data.op_time).split('-');
+                  tipHtml = 
+                  `<div style="max-height:56px;width:auto;border-radius:4px;background:rgba(255,255,255,0.8);box-shadow:0 4px 4px 1px rgba(99,99,99,0.19); padding:4px 12px;  box-sizing:border-box; display:flex; flex-direction:column; justify-content: space-around;font-family: SourceHanSansSC-Light; font-size:12px; color:#8c8c8c">
+                      <div style='margin:0px; display:flex; align-items:center; height:24px;'>
+                        <img style='margin-right:4px;' src="${fuhao}" />${_this.data.targetName}
+                      </div>
+                      <div style='height:24px; display:flex; align-items:center;'>
+                        <a style='display:inline-block; width:2px; height: 10px; background:#FF9900;margin-left:2px'></a>
+                        <span style='margin-left:16px'>${op_time[0]}年${op_time[1]}月&nbsp;&nbsp;&nbsp;</span>
+                        <span>${params[0].data.value}分</span>
+                      </div>
+                    </div>`;
+                }
+                
                 return tipHtml;
               }
             },
@@ -200,7 +215,7 @@
             .title {
               width: auto;
               font-size: 14px;
-              color: rgb(89, 89, 89);
+              color: #262626;
               display: flex;
               align-items: center;
               font-family: 'syht';
@@ -272,7 +287,7 @@
         }
 
         .chart {
-            height:72px;
+            height:80px;
             margin: 10px 0;
         }
     }

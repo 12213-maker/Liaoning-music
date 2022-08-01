@@ -5,6 +5,7 @@
       <el-button size="mini" plain style="height:24px;" @click="goback">返回</el-button>
     </div>
     <TrendLine
+    v-if="show"
     :datas="datas" 
     height="260px"
     title="近12月客户满意指数趋势" 
@@ -27,6 +28,17 @@ export default {
     return {
       // datas:[]
     };
+  },
+  watch:{
+    datas(val) {
+      console.log(324,val)
+    }
+  },
+  computed:{
+    show() {
+      console.log(this.datas && this.datas.length>0);
+      return this.datas && this.datas.length>0
+    }
   },
   created() {
   },

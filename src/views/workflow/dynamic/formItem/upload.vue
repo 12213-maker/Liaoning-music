@@ -162,7 +162,6 @@ export default {
         this.$refs.upload.$data.uploadFiles.splice(idx,1);
         this.$message.error('附件上传失败！');
       }
-      
       this.$emit('changeBtnStatus',false);
     },
     // 上传中的回调
@@ -172,6 +171,7 @@ export default {
     },
 
     uploadError(err) {
+      this.$message.error('附件上传失败！');
       this.$emit('changeBtnStatus',false);
     },
 

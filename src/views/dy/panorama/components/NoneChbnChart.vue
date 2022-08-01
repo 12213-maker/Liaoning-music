@@ -13,6 +13,7 @@
       :colors="chartColors"
       :barValue="innerTab.overviewData.barValue"
       :lineValue="innerTab.overviewData.lineValue"
+      :min = 'undefined'
       ></LineBarChart>
     </div>
   </div>

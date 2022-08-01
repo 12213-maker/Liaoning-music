@@ -3,8 +3,8 @@
   <div style="position:relative">
     <div class="custag-wrap">
       <a class="tag" v-for="(item,idx) in tags">
-        <span class="tag-label">{{item.label}}：</span>
-        <span class="tag-content">{{item.content}}</span>
+        <span class="tag-label">{{item.key}}：</span>
+        <span class="tag-content">{{item.value}}</span>
       </a>
     </div>
 
@@ -13,12 +13,12 @@
     style="position:absolute; right:10px; bottom:20px;color:#262626" 
     placement="left"
     title=""
-    width="500"
+    width="560"
     trigger="hover">
-      <div class="custag-wrap" style="height:auto;overflow:visible">
+      <div class="custag-wrap" style="height:auto; max-height:500px;overflow:auto">
         <a class="tag" v-for="(item,idx) in tags">
-          <span class="tag-label">{{item.label}}：</span>
-          <span class="tag-content">{{item.content}}</span>
+          <span class="tag-label">{{item.key}}：</span>
+          <span class="tag-content">{{item.value}}</span>
         </a>
       </div>
       <a slot="reference">...</a>
@@ -36,6 +36,17 @@ export default {
       ellipsis:false
     }
   },
+
+  watch:{
+    tags() {
+      const custag = document.querySelector(".custag-wrap");
+      if(custag.clientHeight<custag.scrollHeight-6) {
+        // console.log('有超出部分',custag.clientHeight, custag.scrollHeight);
+        this.ellipsis = true;
+      }
+    }
+  },
+
   mounted() {
     const custag = document.querySelector(".custag-wrap");
     if(custag.clientHeight<custag.scrollHeight-6) {
@@ -58,21 +69,19 @@ export default {
     flex-wrap:wrap;
     align-items:flex-start;
     justify-content: start;
-    row-gap:14px;
     font-family:syht;
-
 
     .tag {
       border: 1px solid #e6e6e6;
-      height: 24px;
-      padding: 0 40px 0 16px;
+      padding: 0 16px;
       font-size: 14px;
       font-family: syht;
       text-align: left;
-      line-height: 20px;
-      margin: 0 8px;
+      line-height: 24px;
+      margin-right: 16px;
       border-radius: 4px;
       position:relative;
+      margin-bottom:14px;
 
       .tag-label {
         color: #666;

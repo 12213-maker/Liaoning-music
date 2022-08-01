@@ -32,8 +32,8 @@
       <el-table
         :data="tableData"
         border
-        style="width: 100%; min-height:100%;"
-        @cell-click='onCellClick' 
+        style="width: 100%; min-height: 100%"
+        @cell-click="onCellClick"
       >
         <el-table-column
           type="index"
@@ -50,29 +50,39 @@
           width="350"
         >
         </el-table-column>
-        <el-table-column  label="申请权限" align="center">
+        <el-table-column label="申请权限" align="center">
           <template slot-scope="scope">
-
-             <el-select
-              :value="scope.row.menuNames"  
+            <el-select
+              :value="scope.row.menuNames"
               multiple
               placeholder="请选择"
               readonly
               popper-class="per-popper-select"
-              class="per-select">
-                <el-option :value="optVal">  
-                    <el-tree
-                    :data="scope.row.menuDTO.children"
-                    show-checkbox
-                    node-key="menuId"
-                    :props="{
-                      label:'menuName'
-                    }"
-                    :default-expanded-keys="[2, 3]"
-                    :default-checked-keys="scope.row.menuKeys"
-                    :default-expand-all="true">
-                    </el-tree>
-                </el-option>
+              class="per-select"
+              :class="[
+                scope.row.approveStatus == 2 ? 'checked' : '',
+                scope.row.approveStatus != 2 ? 'unchecked' : '',
+              ]"
+            >
+              <el-option :value="optVal">
+                <el-tree
+                  :data="scope.row.menuDTO.children"
+                  show-checkbox
+                  node-key="menuId"
+                  :props="{
+                    label: 'menuName',
+                  }"
+                  :default-expanded-keys="[2, 3]"
+                  :default-checked-keys="scope.row.menuKeys"
+                  :default-expand-all="true"
+                  :class="[
+                    scope.row.menuKeys.includes(scope.row.approveStatus)
+                      ? 'checked'
+                      : '',
+                  ]"
+                >
+                </el-tree>
+              </el-option>
             </el-select>
             <!-- <div class="allrow">
               <div class="tags">
@@ -101,7 +111,13 @@
             </div> -->
           </template>
         </el-table-column>
-        <el-table-column prop="approveStatus" align="center" width="120" label="申请状态" :formatter="formatStatus">
+        <el-table-column
+          prop="approveStatus"
+          align="center"
+          width="120"
+          label="申请状态"
+          :formatter="formatStatus"
+        >
         </el-table-column>
       </el-table>
     </div>
@@ -131,17 +147,18 @@ export default {
       data: [],
       options: [
         { value: 1, label: "申请中" },
-        { value: 2, label: "已通过" },
-        { value: 3, label: "未通过" },
+        { value: 2, label: "全部通过" },
+        { value: 3, label: "全部不通过" },
+        { value: 4, label: "部分通过" },
       ],
       tableData: [],
       currentPage: 1,
       pageSize: 10,
       total: 100,
       offsetNum: 50,
-      total:0,
-      tableLoading:false,
-      optVal:''
+      total: 0,
+      tableLoading: false,
+      optVal: "",
     };
   },
   methods: {
@@ -158,12 +175,11 @@ export default {
     },
     //点击展示树
     clickShowTree(row) {
-      console.log(row.showTree)
+      console.log(row.showTree);
       row.showTree = !row.showTree;
-      this.tableData.forEach(data=>{
-        if(data.id !== row.id) data.showTree = false;
-      })
-      
+      this.tableData.forEach((data) => {
+        if (data.id !== row.id) data.showTree = false;
+      });
     },
     //点击空白区域隐藏
     hiddenall() {
@@ -178,60 +194,70 @@ export default {
         pageSize: this.pageSize,
         approveStatus: this.selectValue,
         endTime: this.timepick && this.timepick.length ? this.timepick[1] : "",
-        startTime: this.timepick && this.timepick.length ? this.timepick[0] : "",
-      }).then((res) => {
-        if(res.data && res.data.data) {
-          res.data.data.map((item) => {
-            item.showTree = false;
-          });
-
-          //处理树形控件
-          const getMenuName = (data,child) => {
-            child.disabled = true;
-            data.menuKeys.push(child.menuId);
-            if(child.menuType=='C') {
-              data.menuNames.push(child.menuName);
-            }
-
-            if(child.children) {
-              child.children.forEach(c=>{
-                getMenuName(data,c);
-              })
-            }
-          };
-
-          res.data.data.forEach(data=>{
-            data.menuNames = [];
-            data.menuKeys = [];
-            data.menuDTO.children.forEach(child=>getMenuName(data,child))
-          })
-
-          this.tableData = res.data.data;
-          this.total = Number(res.data.total);
-        } else {
-          this.tableData= [];
-        }
-        
-      }).catch(()=>{
-        this.tableData= [];
-      }).finally(()=>{
-        this.tableLoading = false;
+        startTime:
+          this.timepick && this.timepick.length ? this.timepick[0] : "",
       })
+        .then((res) => {
+          if (res.data && res.data.data) {
+            res.data.data.map((item) => {
+              item.showTree = false;
+            });
+
+            //处理树形控件
+            const getMenuName = (data, child) => {
+              child.disabled = true;
+
+              if (child.approveStatus == 2) {
+                data.menuKeys.push(child.menuId);
+              }
+              if (child.menuType == "C") {
+                data.menuNames.push(child.menuName);
+              }
+
+              if (child.children) {
+                child.children.forEach((c) => {
+                  getMenuName(data, c);
+                });
+              }
+            };
+
+            res.data.data.forEach((data) => {
+              data.menuNames = [];
+              data.menuKeys = [];
+              data.menuDTO.children.forEach((child) =>
+                getMenuName(data, child)
+              );
+            });
+
+            this.tableData = res.data.data;
+            this.total = Number(res.data.total);
+          } else {
+            this.tableData = [];
+          }
+        })
+        .catch(() => {
+          this.tableData = [];
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
     },
 
-    formatStatus(row,column,value) {
-      if(value==1) {
-        return '申请中';
-      } else if(value==2) {
-        return '已通过';
+    formatStatus(row, column, value) {
+      if (value == 1) {
+        return "申请中";
+      } else if (value == 2) {
+        return "全部通过";
+      } else if (value == 3) {
+        return "全部不通过";
       } else {
-        return '未通过';
+        return "部分通过";
       }
     },
 
     onCellClick(row, column, cell, event) {
-      console.log(column.label)
-      if(column.label=='申请权限') {
+      console.log(column.label);
+      if (column.label == "申请权限") {
         this.clickShowTree(row);
       }
     },
@@ -243,7 +269,7 @@ export default {
 
     handleCurrentChange() {
       this.getAuthorityList();
-    }
+    },
   },
   mounted() {
     this.getAuthorityList();
@@ -251,80 +277,77 @@ export default {
 };
 </script>
 
-<style lang="scss">
-
+<style lang="scss" >
 .records-query .el-table_1_column_3 {
   position: relative;
 }
 
 .records-query .per-select {
-  width:100%;
-  height:100%;
-  border:0px;
+  width: 100%;
+  height: 100%;
+  border: 0px;
   .el-input__inner {
-    border:0px;
-    background:none;
+    border: 0px;
+    background: none;
   }
   input {
-    height:100%;
+    height: 100%;
   }
 
   .el-tag.el-tag--info .el-tag__close {
-    display:none;
+    display: none;
   }
 
-  .el-select__caret { 
-      appearance:none;
-      -moz-appearance:none;
-      -webkit-appearance:none;
-      padding-right: 14px;
-      background: url("../../../../assets/images/arrow-up.png") no-repeat center transparent;
-      background-size: 12px 12px;
+  .el-select__caret {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    padding-right: 14px;
+    background: url("../../../../assets/images/arrow-up.png") no-repeat center
+      transparent;
+    background-size: 12px 12px;
   }
   .el-icon-arrow-up:before {
-      content: '';
+    content: "";
   }
-
 }
 
-
 .per-popper-select {
-  margin-top:0px !important;
+  margin-top: 0px !important;
 
   .el-select-dropdown__item {
-    height:auto;
-    display:flex;
-    padding:0px;
+    height: auto;
+    display: flex;
+    padding: 0px;
   }
 
   .popper__arrow {
-    display:none;
+    display: none;
   }
   .el-tree {
-    padding:20px;
-    width:100%;
+    padding: 20px;
+    width: 100%;
   }
   .el-tree-node__content {
-    height:34px;
+    height: 34px;
   }
 }
 
-
 .records-query .el-table {
   tbody tr td {
-    padding:0px;
-    height:60px;
+    padding: 0px;
+    height: 60px;
 
     .cell {
-      width:100%;
-      height:100%;
-      line-height:60px;
-      padding:0px;
+      width: 100%;
+      height: 100%;
+      line-height: 60px;
+      padding: 0px;
     }
   }
 }
 
-.records-query  {
+.records-query {
   display: flex;
   flex-direction: column;
   padding-left: 25px;
@@ -345,7 +368,30 @@ export default {
   }
   .table {
     padding-top: 10px;
-    flex-grow:2;  
+    flex-grow: 2;
+
+    .checked {
+      // border: 1px solid #ff9900 !important;
+      .el-tag,
+      .el-tag--info,
+      .el-tag--small,
+      .el-tag--light {
+        // border: 1px solid #ffc266 !important;
+        // background-color: #ffebcc !important;
+        border: 1px solid rgb(255, 153, 0) !important;
+        background-color: rgb(255, 153, 0) !important;
+      }
+    }
+    .unchecked {
+      .el-tag,
+      .el-tag--info,
+      .el-tag--small,
+      .el-tag--light {
+        // border: 1px solid rgb(24, 144, 255) !important;
+        border: 1px solid #ffc266 !important;
+        background-color: #ffebcc !important;
+      }
+    }
   }
 
   .pagination {
@@ -369,5 +415,31 @@ export default {
   .area_popper {
     left: 625px !important;
   }
+  ::v-deep .el-checkbox__input,
+  .is-disabled,
+  .is-checked {
+    border: 1px solid #ffc266 !important;
+    background-color: #ffebcc !important;
+  }
+  ::v-deep .el-checkbox__input.is-checked .el-checkbox__inner {
+    border: 1px solid #ffc266 !important;
+    background-color: #ffebcc !important;
+  }
+  ::v-deep .el-checkbox__inner {
+    border: 1px solid #ffc266 !important;
+    background-color: #ffebcc !important;
+  }
+}
+::v-deep .el-checkbox__input.is-disabled .el-checkbox__inner {
+  border: 1px solid #ffc266 !important;
+  background-color: #ffebcc !important;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  border: 1px solid #ffc266 !important;
+  background-color: #ffebcc !important;
+}
+.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
+    border-color: #ffc266 !important;
 }
 </style>

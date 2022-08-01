@@ -80,7 +80,6 @@ export default {
 
   computed: {
     data() {
-      console.log('info',this.info);
       return this.info;
     }
   },
