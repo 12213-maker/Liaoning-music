@@ -16,13 +16,16 @@
               <div class="showinfo">
                 <div class="showinfo_item">
                   <div class="item_left">
-                    <div>上月来量人次</div>
-                    <div class="item_left_data">{{ item.peopleNum }}</div>
+                    <div v-if="activeName_left == '1'">上月来量人次</div>
+                    <div v-else>当月来量人次</div>
+                    <div class="item_left_data">
+                      {{ item.peopleNum || "-" }}
+                    </div>
                   </div>
                   <div class="item_right">
                     <span>环比：</span>
                     <Arrow
-                      :num="item.peopleMonthly"
+                      :num="Number(item.peopleMonthly)"
                       :isUpset="true"
                       unit="pp"
                     />
@@ -30,13 +33,16 @@
                 </div>
                 <div class="showinfo_item">
                   <div class="item_left">
-                    <div>上月有效量人次</div>
-                    <div class="item_left_data">{{ item.effectNum }}</div>
+                    <div v-if="activeName_left == '1'">上月有效量人次</div>
+                    <div v-else>当月有效量人次</div>
+                    <div class="item_left_data">
+                      {{ item.effectNum || "-" }}
+                    </div>
                   </div>
                   <div class="item_right">
                     <span>环比：</span>
                     <Arrow
-                      :num="item.effectMonthly"
+                      :num="Number(item.effectMonthly)"
                       :isUpset="true"
                       unit="pp"
                     />
@@ -47,7 +53,7 @@
                 :ref="'linebar' + item.id"
                 width="100%"
                 height="306px"
-                :legendsBar="['人次(万)', '']"
+                :legendsBar="isCurrentDate ? ['人次(万)'] : ['人次(万)', '']"
                 :legendsLine="[]"
                 :lineValue="[]"
                 :sameMinMax="true"
@@ -80,21 +86,6 @@
             >
 
             <div>
-              <!-- <LineBarChart_2
-                :ref="'line' + item.id"
-                width="100%"
-                height="160px"
-                :legendsBar="[]"
-                :legendsLine="['人次(万)','']"
-                :barValue="[]"
-                :showSymbol="false"
-                :clickCb="clickCb"
-                :sameMinMax="true"
-                :lineValue="item.lineValue"
-                :xName="xName"
-                :colors="chartColors"
-              ></LineBarChart_2> -->
-
               <LineBarChart_2
                 :ref="'line' + item.id"
                 width="100%"
@@ -106,7 +97,7 @@
                 :clickCb="clickCb"
                 :sameMinMax="true"
                 :lineValue="lineValue"
-                :xName="xName"
+                :xName="linexName"
                 :colors="chartColors"
               ></LineBarChart_2>
             </div>
@@ -137,12 +128,13 @@ import TrendLine from "@/components/common/charts/TrendLine.vue";
 import Arrow from "@/components/common/arrow.vue";
 import HalfPieChart from "./HalfPieChart.vue";
 import LineBarChart_2 from "@/components/common/charts/LineBarChart_2.vue";
-
+import { parseTime } from "@/utils/tools.js";
 import {
   customer_complaint_info,
   customer_complaint_cityList,
+  customer_complaint_compare,
+  customer_complaint_improveRate,
 } from "@/api/dy/panorama";
-import { promised } from "q";
 
 export default {
   components: { LineBarChart_2, TrendLine, Arrow, HalfPieChart },
@@ -153,9 +145,62 @@ export default {
     return {
       activeName_left: "1",
       activeName_right: "1",
+      currentdate: this.getDate()[0],
+      predate: this.getDate()[1],
+      isCurrentDate: false,
+
+      tabs: [
+        {
+          id: "1",
+          label: "上月",
+          peopleNum: "", //上月来量人次
+          effectNum: "", //上月有效量人次
+          peopleMonthly: "", //上月环比
+          effectMonthly: "", //上月环比
+          barValue: this.barValue,
+        },
+        {
+          id: "2",
+          label: "当月",
+          peopleNum: "",
+          effectNum: "",
+          peopleMonthly: "",
+          effectMonthly: "",
+          barValue: this.barValue,
+        },
+      ],
+      tabright: [
+        {
+          id: "1",
+          label: "年度趋势",
+          lineValue: this.lineValue,
+        },
+        {
+          id: "2",
+          label: "月度趋势",
+          lineValue: this.lineValue,
+        },
+      ],
 
       //来量人次和环比
       rate: [],
+      xName: [],
+      linexName: [
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月",
+        "9月",
+        "10月",
+        "11月",
+        "12月",
+      ],
+      dataType: "1",
+      maychart: null,
 
       piecolor: [
         "rgb(45, 154, 85)",
@@ -193,207 +238,161 @@ export default {
         "通信",
         "业务",
       ],
-
-      tabs: [
-        {
-          id: "1",
-          label: "上月",
-          peopleNum: '', //上月来量人次
-          effectNum: '', //上月有效量人次
-          peopleMonthly: '', //上月环比
-          effectMonthly: '', //上月环比
-          barValue: this.barValue,
-        },
-        {
-          id: "2",
-          label: "当月",
-          peopleNum: '',
-          effectNum: '',
-          peopleMonthly: '',
-          effectMonthly: '',
-          barValue: this.barValue,
-        },
-      ],
-      tabright: [
-        {
-          id: "1",
-          label: "年度趋势",
-          lineValue: this.lineValue,
-        },
-        {
-          id: "2",
-          label: "月度趋势",
-          lineValue: this.lineValue,
-        },
-      ],
-
-      xName: [],
-      legendsBar: ["修复量"],
-      legendsLine: ["成功率"],
       chartColors: [
         ["#5FAEFF,#0682FF", "#FFBE4D"],
         ["#FFBE4D", "rgb(255, 137, 102)"],
       ],
       barValue: [],
-      lineValue: [
-        [
-          {
-            name: "沈阳",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
+      lineValue: [],
+      pieData: [],
+      pieConcatData: [
+        {
+          value: 0,
+          name: "",
+          label: {
+            normal: {
+              show: false,
+            },
           },
-          {
-            name: "本溪",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
+        },
+        {
+          value: 0,
+          name: "",
+          label: {
+            normal: {
+              show: false,
+            },
           },
-          {
-            name: "辽阳",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
+        },
+        {
+          value: 0,
+          name: "",
+          label: {
+            normal: {
+              show: false,
+            },
           },
-          {
-            name: "朝阳",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
+        },
+        {
+          value: 0,
+          name: "",
+          label: {
+            normal: {
+              show: false,
+            },
           },
-          {
-            name: "鞍山",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
+        },
+        {
+          value: 0,
+          name: "",
+          label: {
+            normal: {
+              show: false,
+            },
           },
-          {
-            name: "抚顺",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
+        },
+        {
+          value: 0,
+          name: "",
+          label: {
+            normal: {
+              show: false,
+            },
           },
-          {
-            name: "丹东",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
+        },
+        {
+          value: 0,
+          name: "",
+          label: {
+            normal: {
+              show: false,
+            },
           },
-          {
-            name: "锦州",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
+        },
+        {
+          value: 0,
+          name: "",
+          label: {
+            normal: {
+              show: false,
+            },
           },
-          {
-            name: "营口",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
+        },
+        {
+          value: 0,
+          name: "",
+          label: {
+            normal: {
+              show: false,
+            },
           },
-          {
-            name: "阜新",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
+        },
+        {
+          value: 0,
+          name: "",
+          label: {
+            normal: {
+              show: false,
+            },
           },
-          {
-            name: "盘锦",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "铁岭",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "葫芦岛",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-        ],
-        [
-          {
-            name: "沈阳",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "本溪",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "辽阳",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "朝阳",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "鞍山",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "抚顺",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "丹东",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "锦州",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "营口",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "阜新",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "盘锦",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "铁岭",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-          {
-            name: "葫芦岛",
-            value: parseInt(Math.random() * 100).toString(),
-            cityId: 1,
-          },
-        ],
+        },
       ],
     };
   },
   methods: {
-    handleClickInner(tab, pos) {
+    getDate() {
+      const currentdate = parseTime(new Date(), "{y}-{m}");
+      let predate;
+      const arrdate = currentdate.split("-");
+      if (arrdate[1] == "01") {
+        const year = Number(arrdate[0]) - 1;
+        predate = `${year + ""}-12`;
+      } else {
+        const month = Number(arrdate[1]) - 1;
+        predate = `${arrdate[0]}-${month}`;
+      }
+      return [currentdate, predate];
+    },
+    async handleClickInner(tab, pos) {
       const page = tab._props.name;
       //pos:柱状图还是折线图
       //page:上月/当月  或者 年度趋势/月度趋势
       if (pos == "left") {
+        if (page == 1) {
+          await this.customer_complaint_cityList(this.cityId, this.predate);
+          this.isCurrentDate = false;
+        } else {
+          await this.customer_complaint_cityList(this.cityId, this.currentdate);
+          this.isCurrentDate = true;
+        }
         setTimeout(() => {
           this.$refs["linebar" + this.activeName_left][0].drawChart();
         }, 50);
       } else {
+        if (page == 1) {
+          this.dataType = "1";
+          await this.customer_complaint_compare(this.cityId);
+        } else {
+          this.dataType = "2";
+          await this.customer_complaint_compare(this.cityId);
+        }
         setTimeout(() => {
           this.$refs["line" + this.activeName_right][0].drawChart();
         }, 50);
       }
     },
-
     clickCb(params) {
-      console.log(params.data.name, params.data.cityId);
+      // console.log(params.data.name, params.data.cityId);
     },
     tryPieChart() {
-      let mychart = this.$echarts.init(this.$refs.piechart);
+      if (this.maychart) {
+        this.chart.dispose();
+      }
+      this.maychart = this.$echarts.init(this.$refs.piechart);
+      var piedatatemp = [];
+      this.pieData.forEach((item) => {
+        piedatatemp.push(item.value);
+      });
       let option = {
         tooltip: {
           trigger: "item",
@@ -417,17 +416,21 @@ export default {
           },
         },
         legend: {
-          itemGap: 40,
+          itemGap: 25,
+          itemHeight: 14,
           data: this.pieLegendData,
           textStyle: {
             color: "black",
           },
           orient: "vertical",
-          left: "right",
-          itemHeight: 14,
+          left: "55%",
+          top: "0%",
+
           icon: "circle",
+
           formatter: function (param) {
-            return `${param}`;
+            let content = `${param}      ${piedatatemp.shift()}%`;
+            return content;
           },
         },
         series: [
@@ -449,268 +452,215 @@ export default {
             label: {
               show: false,
             },
-            data: [
-              //这下面才是真正的数据
-              {
-                value: 5000,
-                name: this.legendsPie[0],
-                itemStyle: {
-                  normal: {
-                    color: this.piecolor[0],
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                },
-              },
-              {
-                value: 4500,
-                name: this.legendsPie[1],
-                itemStyle: {
-                  normal: {
-                    color: this.piecolor[1],
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                },
-              },
-              {
-                value: 4000,
-                name: this.legendsPie[2],
-                itemStyle: {
-                  normal: {
-                    color: this.piecolor[2],
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                },
-              },
-              {
-                value: 3500,
-                name: this.legendsPie[3],
-                itemStyle: {
-                  normal: {
-                    color: this.piecolor[3],
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                },
-              },
-              {
-                value: 3000,
-                name: this.legendsPie[4],
-                itemStyle: {
-                  normal: {
-                    color: this.piecolor[4],
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                },
-              },
-              {
-                value: 2500,
-                name: this.legendsPie[5],
-                itemStyle: {
-                  normal: {
-                    color: this.piecolor[5],
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                },
-              },
-              {
-                value: 2000,
-                name: this.legendsPie[6],
-                itemStyle: {
-                  normal: {
-                    color: this.piecolor[6],
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                },
-              },
-              {
-                value: 1500,
-                name: this.legendsPie[7],
-                itemStyle: {
-                  normal: {
-                    color: this.piecolor[7],
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                },
-              },
-              {
-                value: 1000,
-                name: this.legendsPie[8],
-                itemStyle: {
-                  normal: {
-                    color: this.piecolor[8],
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                },
-              },
-              {
-                value: 500,
-                name: this.legendsPie[9],
-                itemStyle: {
-                  normal: {
-                    color: this.piecolor[9],
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                },
-              },
-              {
-                value: 0,
-                name: "",
-                label: {
-                  normal: {
-                    show: false,
-                  },
-                },
-              },
-              {
-                value: 0,
-                name: "",
-                label: {
-                  normal: {
-                    show: false,
-                  },
-                },
-              },
-              {
-                value: 0,
-                name: "",
-                label: {
-                  normal: {
-                    show: false,
-                  },
-                },
-              },
-              {
-                value: 0,
-                name: "",
-                label: {
-                  normal: {
-                    show: false,
-                  },
-                },
-              },
-              {
-                value: 0,
-                name: "",
-                label: {
-                  normal: {
-                    show: false,
-                  },
-                },
-              },
-              {
-                value: 0,
-                name: "",
-                label: {
-                  normal: {
-                    show: false,
-                  },
-                },
-              },
-              {
-                value: 0,
-                name: "",
-                label: {
-                  normal: {
-                    show: false,
-                  },
-                },
-              },
-              {
-                value: 0,
-                name: "",
-                label: {
-                  normal: {
-                    show: false,
-                  },
-                },
-              },
-              {
-                value: 0,
-                name: "",
-                label: {
-                  normal: {
-                    show: false,
-                  },
-                },
-              },
-              {
-                value: 0,
-                name: "",
-                label: {
-                  normal: {
-                    show: false,
-                  },
-                },
-              },
-            ],
+            data: this.pieData.concat(this.pieConcatData),
           },
         ],
       };
-      mychart.setOption(option);
+      this.maychart.setOption(option);
       window.onresize = () => {
-        mychart.resize();
+        this.maychart.resize();
       };
     },
-    commitdrawchart() {
-      this.activeName_left = "1";
-      this.activeName_right = "1";
-
-      setTimeout(() => {
-        this.$refs["linebar" + this.activeName_left][0].drawChart();
-        this.$refs["line" + this.activeName_right][0].drawChart();
-        this.tryPieChart();
-      }, 50);
-    },
-    async customer_complaint_cityList() {
-      const data1 = {
+    async customer_complaint_info(cityid) {
+      let data1 = {
         type: this.type,
         cityId: this.cityId,
       };
-      const {data} = await customer_complaint_cityList(data1);
-      // this.barValue = data
-
-      const prevValue = []
-      const currentValue = []
-      const xname = []
-      
-      console.log(data);
-      data.forEach((item)=>{
-        xname.push(item.area_name)
-        const itemprevalue = {
-          name:item.area_name,
-          value:item.prev_month_num_w,
-          rate:Number(item.prev_month_mom_rate)
-        }
-        prevValue.push(itemprevalue)
-
-        const itemcurrent = {
-          name:item.area_name,
-          value:item.prev_month_valid_num_w,
-          rate:Number(item.prev_month_valid_mom_rate)
-        }
-
-        currentValue.push(itemcurrent)
-      })
-      this.barValue = [prevValue,currentValue]
-      this.xName = xname
-      console.log(this.barValue,2222222222);
-    },
-    async customer_complaint_info() {
-      const data1 = {
-        type: this.type,
-        cityId: this.cityId,
-      };
+      if (cityid) {
+        data1 = {
+          type: this.type,
+          cityId: cityid,
+        };
+      }
       const { data } = await customer_complaint_info(data1);
       this.rate = data;
+    },
+    async customer_complaint_cityList(cityid, date) {
+      let currentdate = parseTime(new Date(), "{y}-{m}");
+
+      let data1 = {
+        type: this.type,
+        cityId: this.cityId,
+        date: currentdate,
+      };
+      if (cityid) {
+        data1 = {
+          type: this.type,
+          cityId: cityid,
+        };
+      }
+      if (date) {
+        data1 = {
+          type: this.type,
+          cityId: this.cityId,
+          date: date,
+        };
+      }
+      if (cityid && date) {
+        data1 = {
+          type: this.type,
+          cityId: cityid,
+          date: date,
+        };
+      }
+      const { data } = await customer_complaint_cityList(data1);
+
+      if (date == currentdate) {
+        const currentValue = [];
+        const xname = [];
+        data.forEach((item) => {
+          xname.push(item.area_name);
+          const itemcurrent = {
+            name: item.area_name,
+            value: item.current_month_num_w,
+            rate: Number(item.current_month_mom_rate),
+          };
+
+          currentValue.push(itemcurrent);
+        });
+
+        this.barValue = [currentValue, []];
+        this.xName = xname;
+      } else {
+        const prevValue = [];
+        const currentValue = [];
+        const xname = [];
+        data.forEach((item) => {
+          xname.push(item.area_name);
+          const itemprevalue = {
+            name: item.area_name,
+            value: item.prev_month_num_w,
+            rate: Number(item.prev_month_mom_rate),
+          };
+          prevValue.push(itemprevalue);
+
+          const itemcurrent = {
+            name: item.area_name,
+            value: item.prev_month_valid_num_w,
+            rate: Number(item.prev_month_valid_mom_rate),
+          };
+
+          currentValue.push(itemcurrent);
+        });
+        this.barValue = [prevValue, currentValue];
+        this.xName = xname;
+      }
+
+      
+    },
+    async customer_complaint_compare(cityid) {
+      let data1 = {
+        type: this.type,
+        cityId: this.cityId,
+        dateType: this.dataType,
+      };
+      if (cityid) {
+        data1 = {
+          type: this.type,
+          cityId: cityid,
+          dateType: this.dataType,
+        };
+      }
+      const { curData, preData } = await customer_complaint_compare(data1);
+      let value1 = [];
+      let value2 = [];
+      curData.forEach((item) => {
+        let data = item.complaint_date;
+        const tempdata = data.split("-");
+        if (tempdata[1].indexOf(0) != -1) {
+          tempdata[1] = tempdata[1].slice(1);
+        }
+        data = tempdata[0] + "年" + tempdata[1] + "月";
+        let temp = {
+          name: data,
+          value: item.current_num,
+        };
+        let temp2 = {
+          name: data,
+          value: item.current_valid_num,
+        };
+        value1.push(temp);
+        value2.push(temp2);
+      });
+
+      this.lineValue = [value1, value2];
+      console.warn(this.lineValue);
+    },
+    async customer_complaint_improveRate(cityid) {
+      let data1 = {
+        type: this.type,
+        cityId: this.cityId,
+        // dateType: this.dataType,
+      };
+      if (cityid) {
+        data1 = {
+          type: this.type,
+          cityId: cityid,
+          // dateType: this.dataType,
+        };
+      }
+      // const {data} = await customer_complaint_improveRate(data1);
+
+      const data = [
+        {
+          label: "服务",
+          improveRate: "19.6",
+        },
+        {
+          label: "资费",
+          improveRate: "18.6",
+        },
+        {
+          label: "收费",
+          improveRate: "15.6",
+        },
+        {
+          label: "营销",
+          improveRate: "5.6",
+        },
+        {
+          label: "安全",
+          improveRate: "19.6",
+        },
+        {
+          label: "网络",
+          improveRate: "18.6",
+        },
+        {
+          label: "客服",
+          improveRate: "15.6",
+        },
+        {
+          label: "宣传",
+          improveRate: "5.6",
+        },
+        {
+          label: "通信",
+          improveRate: "15.6",
+        },
+        {
+          label: "业务",
+          improveRate: "5.6",
+        },
+      ];
+
+      data.forEach((item, index) => {
+        const itemStyle = {
+          normal: {
+            color: this.piecolor[index],
+            borderWidth: 1,
+            borderColor: "white",
+          },
+        };
+        let temp = {
+          value: item.improveRate,
+          name: item.label,
+          itemStyle,
+        };
+        this.pieData.push(temp);
+      });
+
+      this.tryPieChart();
     },
     changeRate() {
       this.tabs = [
@@ -727,21 +677,48 @@ export default {
           id: "2",
           label: "当月",
           peopleNum: this.rate.current_month_num_w,
-          effectNum: 56,
+          effectNum: "",
           peopleMonthly: Number(this.rate.current_month_mom_rate),
           effectMonthly: Number(this.rate.current_month_mom_rate),
           barValue: this.barValue,
         },
       ];
     },
-  },
-  async created() {
-    await Promise.all([this.customer_complaint_info(),this.customer_complaint_cityList()])
-    this.changeRate()
+    //数据重新加载,视图刷新
+    async cityIdChange(value) {
+      this.activeName_left = "1";
+      this.activeName_right = "1";
 
+      await Promise.all([
+        this.customer_complaint_info(value),
+        this.customer_complaint_cityList(value, this.predate),
+        this.customer_complaint_compare(value),
+        this.customer_complaint_improveRate(value),
+      ]);
+
+      this.tryPieChart();
+      this.$refs["linebar" + this.activeName_left][0].drawChart();
+      this.$refs["line" + this.activeName_right][0].drawChart();
+    },
+  },
+  created() {
+    const date = new Date();
+    const year = date.getFullYear();
+    this.linexName = this.linexName.map((item) => {
+      return year + "年" + item;
+    });
+  },
+
+  async mounted() {
+    await Promise.all([
+      this.customer_complaint_info(),
+      this.customer_complaint_cityList(this.cityId, this.predate),
+      this.customer_complaint_compare(this.cityId),
+      this.customer_complaint_improveRate(this.cityId),
+    ]);
+    this.changeRate();
     this.$refs["linebar" + this.activeName_left][0].drawChart();
     this.$refs["line" + this.activeName_right][0].drawChart();
-    this.tryPieChart();
   },
 };
 </script>
