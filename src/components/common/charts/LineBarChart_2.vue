@@ -6,7 +6,6 @@
       ref="chart"
       v-show="xName.length"
     ></div>
-    <Blank v-show="!xName.length" style="height: 100%" />
   </div>
 </template>
 <script>
@@ -82,56 +81,65 @@ export default {
       let min = 0;
       let max = 0;
       if (this.sameMinMax) {
-        this.barValue.forEach((item) => {
-          item.sort((a, b) => {
-            if (a.value) {
-              return a.value - b.value;
-            } else {
-              return a - b;
+          this.barValue.forEach((item) => {
+            if(item.length!=0){
+              item.sort((a, b) => {
+              if (a.value) {
+                return a.value - b.value;
+              } else {
+                return a - b;
+              }
+            });
+
+            if (item[0].value && item[0].value < min) {
+              min = Number(item[0].value);
+            } else if (item[0] < min) {
+              min = Number(item[0]);
             }
-          });
 
-          if (item[0].value && item[0].value < min) {
-            min = Number(item[0].value);
-          } else if (item[0] < min) {
-            min = Number(item[0]);
-          }
-
-          if (
-            item[item.length - 1].value &&
-            item[item.length - 1].value > max
-          ) {
-            max = Number(item[item.length - 1].value);
-          } else if (item[item.length - 1] > max) {
-            max = Number(item[item.length - 1]);
-          }
-        });
-
-        this.lineValue.forEach((item) => {
-          item.sort((a, b) => {
-            if (a.value) {
-              return a.value - b.value;
-            } else {
-              return a - b;
+            if (
+              item[item.length - 1].value &&
+              item[item.length - 1].value > max
+            ) {
+              max = Number(item[item.length - 1].value);
+            } else if (item[item.length - 1] > max) {
+              max = Number(item[item.length - 1]);
             }
+            }
+
           });
+        
+        if (this.lineValue.length != 0) {
+          this.lineValue.forEach((item) => {
+            if(item.length!=0){
+              item.sort((a, b) => {
+              if (a.value) {
+                return a.value - b.value;
+              } else {
+                return a - b;
+              }
+            });
 
-          if (item[0].value && item[0].value < min) {
-            min = Number(item[0].value);
-          } else if (item[0] < min) {
-            min = Number(item[0]);
-          }
+            if (item[0].value && item[0].value < min) {
+              min = Number(item[0].value);
+            } else if (item[0] < min) {
+              min = Number(item[0]);
+            }
 
-          if (
-            item[item.length - 1].value &&
-            item[item.length - 1].value > max
-          ) {
-            max = Number(item[item.length - 1].value);
-          } else if (item[item.length - 1] > max) {
-            max = Number(item[item.length - 1]);
-          }
-        });
+            if (
+              item[item.length - 1].value &&
+              item[item.length - 1].value > max
+            ) {
+              max = Number(item[item.length - 1].value);
+            } else if (item[item.length - 1] > max) {
+              max = Number(item[item.length - 1]);
+            }
+            }
+            
+          });
+        }
       }
+
       let option = {
         tooltip: {
           show: true,
@@ -157,6 +165,7 @@ export default {
             content += `<div style="padding:10px 10px 5px 10px;">
                             <span style="width:140px;display:inline-block; color:#999; font-family:syht">${val[0].axisValue}</span>
                         </div>`;
+
             val.forEach((el) => {
               let colorStr = el.color;
               if (typeof el.color != "string") {
@@ -196,6 +205,8 @@ export default {
                             <span style="width:auto;display:inline-block;color:#666; font-family:syht">环比：${el.data.rate}</span>
 
                           </div><br/>`;
+              } else {
+                content += `<br/>`;
               }
             });
             return (
@@ -238,7 +249,7 @@ export default {
                   }
                   return str;
                 }
-                return val;
+                return val.length >= 7 ? val.split("").splice(5).join("") : val;
               },
             },
 
@@ -337,7 +348,7 @@ export default {
           data: this.barValue[indexs],
         });
       });
-
+      console.warn(1);
       this.legendsLine.forEach((item, idx) => {
         let yObj;
         if (this.sameMinMax) {
@@ -413,11 +424,31 @@ export default {
             yObj.min = min;
           }
         }
-
-        console.log("yObj", yObj);
         yAxis.push(yObj);
+        console.warn(123);
 
         series.push({
+          areaStyle: {
+            color: {
+              type: "linear",
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [
+                {
+                  offset: 0,
+                  color: idx == 0 ? "rgb(255, 234, 200)" : "rgb(255, 215, 184)", // 0% 处的颜色
+                },
+                {
+                  offset: 1,
+                  color: "white", // 100% 处的颜色
+                },
+              ],
+              global: false,
+            },
+          },
+
           name: idx == 0 ? "来量" : "有效量",
           type: "line",
           yAxisIndex: !this.legendsBar.length

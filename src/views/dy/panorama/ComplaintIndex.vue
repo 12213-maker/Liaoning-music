@@ -2,7 +2,12 @@
   <div class="complaintindex no-line-tab">
     <div class="selctChoice">
       <span>地市：</span>
-      <el-select @change="selectChange" v-model="value" size="small" placeholder="全部">
+      <el-select
+        @change="selectChange"
+        v-model="value"
+        size="small"
+        placeholder="全部"
+      >
         <el-option
           v-for="item in options"
           :key="item.id"
@@ -22,7 +27,7 @@
         <Tab
           v-if="echart_show[index].Tab_show"
           :ref="'tab_' + Number(index + 1)"
-          :cityId="value=='全部'?'999':value"
+          :cityId="value == '全部' ? '999' : value"
           :type="activeNameOuter"
         ></Tab>
       </el-tab-pane>
@@ -53,8 +58,7 @@ export default {
         },
       ],
       value: "全部",
-      options: [
-      ],
+      options: [],
       echart_show: [
         { Tab_show: true, left: [true, false], right: [true, false] },
         { Tab_show: false, left: [false, false], right: [false, false] },
@@ -71,11 +75,6 @@ export default {
         { Tab_show: false, left: [false, false], right: [false, false] },
       ];
       this.echart_show[flag] = value;
-      setTimeout(()=>{
-        this.$refs['tab_'+this.activeNameOuter][0].commitdrawchart()
-        this.$refs['tab_'+this.activeNameOuter][0].changeRate()
-        
-      },50)
     },
     handleClickOuter(tab) {
       const value = {
@@ -97,18 +96,18 @@ export default {
         cityId: "999",
       });
       console.log(data);
-      this.options = data
+      this.options = data;
       this.options.unshift({
-        cityname:'全部',
-        id:'999'
-      })
+        cityname: "全部",
+        id: "999",
+      });
     },
-    selectChange(value){
-      console.log('我是选择 , 我改变了',this.value);
-    }
+    selectChange(value) {
+      this.$refs["tab_" + this.activeNameOuter][0].cityIdChange(this.value)
+    },
   },
   created() {
-    this.getCustomer_cityList()
+    this.getCustomer_cityList();
   },
 };
 </script>

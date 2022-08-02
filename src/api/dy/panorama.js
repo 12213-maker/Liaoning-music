@@ -106,3 +106,18 @@ export function customer_complaint_cityList(data){
 	})
 }
 
+export function customer_complaint_compare(data){
+	return request({
+		url:'/api/rest-open-api/customer_complaint_compare',
+		method:'post',
+		data:data
+	})
+}
+
+export function customer_complaint_improveRate(data){
+	return request({
+		url:'/api/rest-open-api/customer_complaint_improveRate',
+		method:'post',
+		data:data
+	})
+}
